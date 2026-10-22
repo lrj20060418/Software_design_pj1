@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.svg
+!fixtures/**/*.svg
+.DS_Store
+*.log
+.env

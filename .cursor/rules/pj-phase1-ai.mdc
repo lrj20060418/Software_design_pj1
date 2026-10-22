@@ -1,0 +1,29 @@
+---
+description: PJ1 Phase1 SVG CLI — AI 护栏与任务边界（始终生效）
+alwaysApply: true
+---
+
+# PJ1 Phase 1 — AI 约束
+
+权威规格：`phase_cli_1.md`。护栏全文：`doc/AI_GUARDRAILS.md`。任务边界：`doc/TASK_BOUNDARIES.md`。架构：`doc/README.md`。
+
+## 每次动手前
+
+1. 声明当前 **Exp-N** 的 In-Scope / Out-of-Scope。
+2. 用户未指定 Exp 时，默认只做 `TASK_BOUNDARIES.md` 中第一个未完成项；不得跨 Exp。
+
+## 硬禁令
+
+- 禁止一次实现全部命令；禁止实现 `box`/插件（`create box` → unknown shape type）。
+- 禁止贫血模型 + 到处 `switch(tag)`；按名分派仅允许 Dispatcher 与 ShapeFactory。
+- 禁止 `model` → `cli|io|commands|history`；`io` → `commands|cli`；`history` 仅依赖 `ICommand`。
+- 禁止改规格未定义行为；禁止失败命令产生副作用；错误前缀必须 `error:`，文案对齐 §4.2。
+- 禁止无关重构、擅自大提交、force push。
+
+## 硬要求
+
+- TypeScript OOP：一类一文件；可编辑命令实现 `ICommand`，经 `History`；Composite 统一操作 g/叶子。
+- IO 命令后禁止 undo，直到再次编辑；显示类不进栈。
+- 结束时给出验收命令序列；提醒单 Exp 一次 commit。
+
+用户说「按 Exp-N」时，以 `doc/TASK_BOUNDARIES.md` 该节为准，超出范围直接拒绝并说明。

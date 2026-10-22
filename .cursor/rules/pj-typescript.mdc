@@ -1,0 +1,13 @@
+---
+description: PJ1 TypeScript 代码范式（编辑 src 时生效）
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# 代码范式
+
+- 字段封装；行为在类方法上，不写跨类型过程式 util 堆业务。
+- 新命令：`src/commands/XxxCommand.ts` 实现 `ICommand`。
+- 新图形：`src/model/Xxx.ts` 继承 `Shape`；创建走 Factory，不在 CLI 里 `new` 分叉。
+- `tokenize` / 纯解析可保留函数；领域状态变更必须走 Document/Shape/Command。
+- 用户可见字符串：成功摘要、`error:`、`warning:` 对齐 `phase_cli_1.md`，勿擅自英文改写已规定句式。

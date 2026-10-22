@@ -1,0 +1,20 @@
+{
+  "name": "svg-editor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cli": "tsx src/cli/main.ts",
+    "build": "tsc",
+    "start": "node dist/cli/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "CLI SVG editor (PJ1 Phase 1)",
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
