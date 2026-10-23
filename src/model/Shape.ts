@@ -9,6 +9,13 @@ export abstract class Shape {
     return this.id;
   }
 
+  protected xmlAttr(name: string, value: string | number | undefined): string {
+    if (value === undefined) {
+      return "";
+    }
+    return ` ${name}="${escapeXml(String(value))}"`;
+  }
+
   abstract getType(): string;
 
   /** 叶子锚点，供 move 成功回显 `moved to (x,y)` */
@@ -33,4 +40,15 @@ export abstract class Shape {
   abstract toTreeLine(indent: string, isLast: boolean): string[];
 
   abstract toShowLines(parentRef: string): string[];
+
+  /** 序列化为 SVG 片段（含缩进）；供 SvgWriter 使用 */
+  abstract toSvgLines(indent: string): string[];
+}
+
+export function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }

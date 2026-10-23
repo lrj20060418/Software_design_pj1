@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.svg
 !fixtures/**/*.svg
+!other.svg
 .DS_Store
 *.log
 .env

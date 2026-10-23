@@ -84,6 +84,24 @@ export class Document {
     return this.roots;
   }
 
+  /** 已登记图形总数（含 g 与嵌套子孙），供 save/read 回显 */
+  elementCount(): number {
+    return this.shapes.size;
+  }
+
+  /**
+   * 读入用：将已在内存中组好的子树挂到根并建立索引。
+   * shape 若为 Group，其子节点须已挂在 children 上。
+   */
+  importRoot(shape: Shape): void {
+    this.ensureReady();
+    if (this.shapes.has(shape.getId())) {
+      throw new Error(`error: id already exists: ${shape.getId()}`);
+    }
+    this.roots.push(shape);
+    this.registerSubtree(shape, null);
+  }
+
   /**
    * 将图形挂到根或指定 g 容器下。
    * @param containerId 省略则挂在画布根

@@ -115,6 +115,12 @@ export class Ellipse extends Shape {
     return lines;
   }
 
+  toSvgLines(indent: string): string[] {
+    return [
+      `${indent}<ellipse${this.xmlAttr("id", this.id)}${this.xmlAttr("cx", this.cx)}${this.xmlAttr("cy", this.cy)}${this.xmlAttr("rx", this.rx)}${this.xmlAttr("ry", this.ry)}${this.xmlAttr("fill", this.fill)}${this.xmlAttr("stroke", this.stroke)}${this.xmlAttr("stroke-width", this.strokeWidth)}/>`,
+    ];
+  }
+
   private styleLine(): string | null {
     const parts: string[] = [];
     if (this.fill !== undefined) {

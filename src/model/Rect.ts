@@ -115,6 +115,12 @@ export class Rect extends Shape {
     return lines;
   }
 
+  toSvgLines(indent: string): string[] {
+    return [
+      `${indent}<rect${this.xmlAttr("id", this.id)}${this.xmlAttr("x", this.x)}${this.xmlAttr("y", this.y)}${this.xmlAttr("width", this.width)}${this.xmlAttr("height", this.height)}${this.xmlAttr("fill", this.fill)}${this.xmlAttr("stroke", this.stroke)}${this.xmlAttr("stroke-width", this.strokeWidth)}/>`,
+    ];
+  }
+
   private styleLine(): string | null {
     const parts: string[] = [];
     if (this.fill !== undefined) {

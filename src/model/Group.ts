@@ -85,4 +85,17 @@ export class Group extends Shape {
       `  children=${this.children.length}`,
     ];
   }
+
+  toSvgLines(indent: string): string[] {
+    if (this.children.length === 0) {
+      return [`${indent}<g${this.xmlAttr("id", this.id)}/>`];
+    }
+    const lines = [`${indent}<g${this.xmlAttr("id", this.id)}>`];
+    const childIndent = `${indent}  `;
+    for (const child of this.children) {
+      lines.push(...child.toSvgLines(childIndent));
+    }
+    lines.push(`${indent}</g>`);
+    return lines;
+  }
 }

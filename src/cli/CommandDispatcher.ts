@@ -11,6 +11,8 @@ import { AddToCommand } from "../commands/AddToCommand.js";
 import { FrontCommand } from "../commands/FrontCommand.js";
 import { BackCommand } from "../commands/BackCommand.js";
 import { ScaleCommand } from "../commands/ScaleCommand.js";
+import { SvgReader } from "../io/SvgReader.js";
+import { SvgWriter } from "../io/SvgWriter.js";
 import { tokenize } from "./tokenize.js";
 
 /**
@@ -19,6 +21,9 @@ import { tokenize } from "./tokenize.js";
  * 本类是第一处，架构方案中标注为待重构点。
  */
 export class CommandDispatcher {
+  private readonly reader = new SvgReader();
+  private readonly writer = new SvgWriter();
+
   constructor(
     private readonly document: Document,
     private readonly history: History,
@@ -37,6 +42,10 @@ export class CommandDispatcher {
         return this.help();
       case "init":
         return this.init(args);
+      case "read":
+        return this.read(args);
+      case "save":
+        return this.save(args);
       case "create":
         return this.create(args);
       case "tree":
@@ -86,6 +95,8 @@ export class CommandDispatcher {
       "  front <id> / back <id>              z-order among siblings",
       "  scale <id> <factor>                  scale geometry by factor",
       "  canvas [w] [h]                      show or resize canvas",
+      "  save [file.svg]                     save document to svg",
+      "  read <file.svg>                     load document from svg",
       "  undo / redo                         undo or redo last edit",
       "  tree [id]                            show structure tree",
       "  show <id>                            show shape attributes",
@@ -104,6 +115,43 @@ export class CommandDispatcher {
     this.document.init(width, height);
     this.history.clearAfterIo();
     return `canvas ${width}x${height} created`;
+  }
+
+  private read(args: string[]): string {
+    if (args.length !== 1) {
+      return "error: usage: read <file.svg>";
+    }
+    const filePath = args[0];
+    try {
+      const warnings = this.reader.read(filePath, this.document);
+      this.history.clearAfterIo();
+      const count = this.document.elementCount();
+      const lines = [...warnings, `read ${filePath} (${count} elements)`];
+      return lines.join("\n");
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  private save(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length > 1) {
+      return "error: usage: save [file.svg]";
+    }
+
+    const filePath = args[0] ?? this.document.getSourcePath();
+    if (!filePath) {
+      return "error: usage: save [file.svg]";
+    }
+
+    try {
+      const count = this.writer.write(this.document, filePath);
+      this.document.setSourcePath(filePath);
+      this.history.clearAfterIo();
+      return `saved to ${filePath} (${count} elements)`;
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
   }
 
   private create(args: string[]): string {

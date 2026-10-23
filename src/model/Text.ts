@@ -1,4 +1,4 @@
-import { Shape } from "./Shape.js";
+import { Shape, escapeXml } from "./Shape.js";
 
 export class Text extends Shape {
   private x: number;
@@ -100,6 +100,12 @@ export class Text extends Shape {
       lines.push(style);
     }
     return lines;
+  }
+
+  toSvgLines(indent: string): string[] {
+    return [
+      `${indent}<text${this.xmlAttr("id", this.id)}${this.xmlAttr("x", this.x)}${this.xmlAttr("y", this.y)}${this.xmlAttr("fill", this.fill)}${this.xmlAttr("stroke", this.stroke)}${this.xmlAttr("stroke-width", this.strokeWidth)}>${escapeXml(this.content)}</text>`,
+    ];
   }
 
   private styleLine(): string | null {

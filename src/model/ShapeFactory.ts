@@ -90,6 +90,79 @@ export class ShapeFactory {
     return new Group(id);
   }
 
+  /**
+   * 从 SVG 标签属性构造图形（读盘路径；按名字分派仍仅在本工厂）。
+   */
+  static fromSvg(
+    tag: string,
+    id: string,
+    attrs: Record<string, string>,
+    textContent = "",
+  ): Shape {
+    switch (tag) {
+      case "rect": {
+        const shape = new Rect(
+          id,
+          num(attrs.x, 0),
+          num(attrs.y, 0),
+          num(attrs.width, 0),
+          num(attrs.height, 0),
+          attrs.fill,
+        );
+        applyStyle(shape, attrs);
+        return shape;
+      }
+      case "circle": {
+        const shape = new Circle(
+          id,
+          num(attrs.cx, 0),
+          num(attrs.cy, 0),
+          num(attrs.r, 0),
+          attrs.fill,
+        );
+        applyStyle(shape, attrs);
+        return shape;
+      }
+      case "ellipse": {
+        const shape = new Ellipse(
+          id,
+          num(attrs.cx, 0),
+          num(attrs.cy, 0),
+          num(attrs.rx, 0),
+          num(attrs.ry, 0),
+          attrs.fill,
+        );
+        applyStyle(shape, attrs);
+        return shape;
+      }
+      case "line": {
+        const shape = new Line(
+          id,
+          num(attrs.x1, 0),
+          num(attrs.y1, 0),
+          num(attrs.x2, 0),
+          num(attrs.y2, 0),
+          attrs.stroke,
+        );
+        if (attrs["stroke-width"] !== undefined) {
+          shape.setAttribute("stroke-width", attrs["stroke-width"]);
+        }
+        return shape;
+      }
+      case "text": {
+        const text = new Text(id, num(attrs.x, 0), num(attrs.y, 0), textContent);
+        applyStyle(text, attrs);
+        return text;
+      }
+      case "g":
+        return new Group(id);
+      default:
+        throw new Error(
+          `error: unknown shape type: ${tag} (is the plugin loaded?)`,
+        );
+    }
+  }
+
   private static requireNumbers(raw: string[]): number[] {
     return raw.map((token) => {
       const n = Number(token);
@@ -98,5 +171,22 @@ export class ShapeFactory {
       }
       return n;
     });
+  }
+}
+
+function num(raw: string | undefined, fallback: number): number {
+  if (raw === undefined || raw === "") {
+    return fallback;
+  }
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function applyStyle(shape: Shape, attrs: Record<string, string>): void {
+  if (attrs.stroke !== undefined) {
+    shape.setAttribute("stroke", attrs.stroke);
+  }
+  if (attrs["stroke-width"] !== undefined) {
+    shape.setAttribute("stroke-width", attrs["stroke-width"]);
   }
 }

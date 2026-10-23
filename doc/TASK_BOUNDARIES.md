@@ -17,7 +17,7 @@
 | Exp-2 | Command + `move`/`set`/`delete` + undo/redo | `[x]` | §3 编辑类；§4.3 |
 | Exp-3 | 结构：`group`/`ungroup`/`addto`/`front`/`back` | `[x]` | §3；§4.2 错误 |
 | Exp-4 | `scale` + `canvas` | `[x]` | §3；§4.2 scale |
-| Exp-5 | `save`/`read` + 缺 id 警告 | `[ ]` | §3 文档类；§0 SVG |
+| Exp-5 | `save`/`read` + 缺 id 警告 | `[x]` | §3 文档类；§0 SVG |
 | Exp-6 | 错误表打磨 + 第 6 节全会话验收 | `[ ]` | §4.2；§6 |
 | Exp-7 | 文档定稿 + tag `final` | `[ ]` | §1 提交 |
 

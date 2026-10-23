@@ -113,6 +113,12 @@ export class Line extends Shape {
     return lines;
   }
 
+  toSvgLines(indent: string): string[] {
+    return [
+      `${indent}<line${this.xmlAttr("id", this.id)}${this.xmlAttr("x1", this.x1)}${this.xmlAttr("y1", this.y1)}${this.xmlAttr("x2", this.x2)}${this.xmlAttr("y2", this.y2)}${this.xmlAttr("stroke", this.stroke)}${this.xmlAttr("stroke-width", this.strokeWidth)}/>`,
+    ];
+  }
+
   private styleLine(): string | null {
     const parts: string[] = [];
     if (this.stroke !== undefined) {
