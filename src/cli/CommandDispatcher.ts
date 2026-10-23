@@ -10,6 +10,7 @@ import { UngroupCommand } from "../commands/UngroupCommand.js";
 import { AddToCommand } from "../commands/AddToCommand.js";
 import { FrontCommand } from "../commands/FrontCommand.js";
 import { BackCommand } from "../commands/BackCommand.js";
+import { ScaleCommand } from "../commands/ScaleCommand.js";
 import { tokenize } from "./tokenize.js";
 
 /**
@@ -58,6 +59,10 @@ export class CommandDispatcher {
         return this.front(args);
       case "back":
         return this.back(args);
+      case "scale":
+        return this.scale(args);
+      case "canvas":
+        return this.canvas(args);
       case "undo":
         return this.undo(args);
       case "redo":
@@ -79,6 +84,8 @@ export class CommandDispatcher {
       "  ungroup <gid>                       dissolve nested g",
       "  addto <gid> <id>                    move shape into g",
       "  front <id> / back <id>              z-order among siblings",
+      "  scale <id> <factor>                  scale geometry by factor",
+      "  canvas [w] [h]                      show or resize canvas",
       "  undo / redo                         undo or redo last edit",
       "  tree [id]                            show structure tree",
       "  show <id>                            show shape attributes",
@@ -256,6 +263,47 @@ export class CommandDispatcher {
       return "error: usage: back <id>";
     }
     return this.history.execute(new BackCommand(this.document, args[0]));
+  }
+
+  private scale(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 2) {
+      return "error: usage: scale <id> <factor>";
+    }
+
+    const id = args[0];
+    const factor = Number(args[1]);
+    if (!Number.isFinite(factor)) {
+      return "error: usage: scale <id> <factor>";
+    }
+    if (factor <= 0) {
+      return "error: scale factor must be positive";
+    }
+
+    const shape = this.document.requireShape(id);
+    return this.history.execute(new ScaleCommand(shape, factor));
+  }
+
+  private canvas(args: string[]): string {
+    this.document.ensureReady();
+
+    if (args.length === 0) {
+      return `canvas ${this.document.getWidth()}x${this.document.getHeight()}`;
+    }
+
+    if (args.length !== 2) {
+      return "error: usage: canvas [w] [h]";
+    }
+
+    const width = Number(args[0]);
+    const height = Number(args[1]);
+    if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
+      return "error: invalid canvas size";
+    }
+
+    this.document.setSize(width, height);
+    this.history.clearAfterIo();
+    return `canvas ${width}x${height}`;
   }
 
   private undo(args: string[]): string {
