@@ -19,7 +19,7 @@
 | Exp-4 | `scale` + `canvas` | `[x]` | §3；§4.2 scale |
 | Exp-5 | `save`/`read` + 缺 id 警告 | `[x]` | §3 文档类；§0 SVG |
 | Exp-6 | 错误表打磨 + 第 6 节全会话验收 | `[x]` | §4.2；§6 |
-| Exp-7 | 文档定稿 + tag `final` | `[ ]` | §1 提交 |
+| Exp-7 | 文档定稿 + tag `final` | `[x]` | §1 提交 |
 
 **本阶段明确不做（全局 Out-of-Scope）**
 

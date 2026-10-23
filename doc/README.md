@@ -1,6 +1,6 @@
 # SVG Editor（CLI）— PJ1 Phase 1 文档
 
-> 状态：Exp-0…6 功能已齐；Exp-7 待收尾（推远程 / tag `final`）。  
+> 状态：**Phase 1 完成**（Exp-0…7）；远程 tag `final`。  
 > 配套约束：[AI 护栏](./AI_GUARDRAILS.md) · [实验任务边界](./TASK_BOUNDARIES.md) · 规格 [`phase_cli_1.md`](../phase_cli_1.md)
 
 ---
@@ -123,37 +123,54 @@ model  →  （无向上依赖；不依赖 cli / io / commands / history）
    - AI/协作问题：长时间运行的旧 `npm run cli` 未加载新命令（表现为 `unknown command: group`）→ 须重启 REPL。  
    - 磁盘短暂 ENOSPC / npm 异常退出 → 清理后重试。  
    - 对照：`phase_cli_1.md` §4.2 / §6；纠正：文档与验收记录，无改规格未定义行为。  
-6. **待 Exp-7**：过程记录定稿、推远程、tag `final`。
+6. **Exp-7（2026-10-23）**：定稿本文档；推送远程；打 tag `final`。
+
+### AI 违规/纠正摘录（护栏 §6 格式）
+
+#### 2026-10-23 Exp-3（运行时）
+- AI 建议/代码问题：用户终端报 `error: unknown command: group`，易误判为实现缺失。  
+- 对照规格条款：§3 `group` 已在 Exp-3 In-Scope 落地。  
+- 确认方式：核对 `CommandDispatcher` 含 `case "group"`；终端为旧 REPL 进程。  
+- 纠正：重启 `npm run cli`；在文档「运行方式」中写明须重启。
+
+#### 2026-10-23 Exp-6（范围）
+- AI 建议/代码问题：无一次实现版本 B / `box`。  
+- 对照规格条款：§4.4 本阶段不要求；TASK_BOUNDARIES Exp-6 Out-of-Scope。  
+- 确认方式：`create box` → `unknown shape type`。  
+- 纠正：保持拒绝路径，仅文档记录。
 
 ---
 
 ## 一致性自查
 
-| 问题 | 现状（Exp-6） |
+对照架构方案如实回答：
+
+1. **模块划分**：实际目录为 `cli` / `commands` / `model` / `history` / `io`，与方案一致；PlantUML 已补上 `cli → io`。  
+2. **依赖方向**：**未违反**。抽样：`model` 无向上 import；`History` 仅 `import type { ICommand }`；`SvgReader`/`SvgWriter` 只依赖 `model`；各 `*Command` 只依赖 `model`（+ `ICommand`）；`CommandDispatcher` 作为组装根依赖各方。
+
+| 附加检查 | 结果 |
 |---|---|
-| 模块划分是否与方案一致？ | 是：`cli` / `commands` / `model` / `history` / `io` |
-| 依赖方向是否被违反？ | **通过**：`model` 仅互引；`history` 仅 `ICommand`；`io` → `model`（+ `ShapeFactory`）；`commands` → `model`；`cli` 组装各方。未见 `model→cli/io/commands` |
 | 按名字分派是否只有两处？ | 是：`CommandDispatcher` + `ShapeFactory` |
 | `create box`？ | `error: unknown shape type: box (is the plugin loaded?)` |
-| Composite ungroup？ | `Shape.canUngroup()`：普通 `g` 为 true；无 box 时无触发 `cannot ungroup composite shape` 路径（接口已预留） |
+| Composite ungroup 预留？ | `Shape.canUngroup()`；无 box 时无触发 composite 错误路径 |
 
 ---
 
 ## 质量保证手段
 
-1. **手工回放**：`phase_cli_1.md` §6 与 §6.1 版本 A（不含版本 B / box）已跑通。  
-2. **错误表对照**：§4.2 各条造失败用例，文案一致（含 `cannot write file`）。  
-3. **浏览器预览**：`save` 产物 `demo.svg`、`flowchart.svg` 为合法 SVG（可用浏览器 / SVG Preview 打开）。  
-4. **git 分步提交**：每 Exp 一次 commit（见 `git log`）。  
-5. （可选）后续可为 `tokenize` / `History` 补单元测试。
+1. **手工回放**：对照 `phase_cli_1.md` §6 与 §6.1 版本 A（**不含**版本 B / box），命令语义与关键回显一致。  
+2. **错误表对照**：§4.2 逐条造失败用例，前缀均为 `error:`。  
+3. **浏览器预览**：`save` 得到的 `demo.svg` / `flowchart.svg` 可直接用浏览器或 VS Code SVG Preview 打开。  
+4. **git 分步提交**：按 Exp 分次 commit，最终 tag `final`。  
+5. **失败零副作用**：校验失败不入 History、不改 Document（如未知属性、非法 scale）。
 
-### Exp-6 验收要点（摘要）
+### 功能完整性摘要
 
 | 用例 | 结果 |
 |---|---|
-| §6 全会话 | move/undo/redo、set/undo、group 子孙错误、delete/undo、save 后 undo 禁止、read other.svg 警告与 tree |
-| §6.1A 流程图 | `in` 建树、`move node2`、`set process-label`、`save flowchart.svg (8 elements)` |
-| §4.2 | id 冲突 / 不存在 / container / 类型 / top-level ungroup / scale≤0 / 读写失败 / 未 init |
+| §6 全会话 | move/undo/redo、set、group 约束、delete/undo、IO 后 undo 锁、read 缺 id 警告 |
+| §6.1A 流程图 | `in` 建树、容器 move、`save flowchart.svg (8 elements)` |
+| §4.2 | id / container / 类型 / ungroup / scale / 文件 IO / 未 init |
 
 ---
 
@@ -166,3 +183,5 @@ npm run cli
 ```
 
 改代码后须 **重启** `npm run cli`（tsx 不热更新已运行进程）。
+
+远程仓库：`origin` → GitHub；验收以 tag `final` 为准。
