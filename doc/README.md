@@ -1,6 +1,6 @@
 # SVG Editor（CLI）— PJ1 Phase 1 文档
 
-> 状态：骨架阶段。本文档先锁定架构方案，后续随实现更新「过程记录 / 一致性自查 / 质量保证」。  
+> 状态：Exp-0…6 功能已齐；Exp-7 待收尾（推远程 / tag `final`）。  
 > 配套约束：[AI 护栏](./AI_GUARDRAILS.md) · [实验任务边界](./TASK_BOUNDARIES.md) · 规格 [`phase_cli_1.md`](../phase_cli_1.md)
 
 ---
@@ -53,6 +53,8 @@ package "io" {
 [CommandDispatcher] --> [Cmds]
 [CommandDispatcher] --> [Document]
 [CommandDispatcher] --> [History]
+[CommandDispatcher] --> [SvgReader]
+[CommandDispatcher] --> [SvgWriter]
 [Cmds] --> [ICommand]
 [Cmds] --> [Document]
 [History] --> [ICommand]
@@ -60,6 +62,7 @@ package "io" {
 [Leaves] --> [Shape]
 [Document] --> [Shape]
 [SvgReader] --> [Document]
+[SvgReader] --> [ShapeFactory]
 [SvgWriter] --> [Document]
 @enduml
 ```
@@ -67,7 +70,7 @@ package "io" {
 **按名字分派的两处（待重构标注）：**
 
 1. `CommandDispatcher`：命令名 → 处理逻辑  
-2. `ShapeFactory`：类型名 → `Rect` / `Circle` / `Ellipse` / `Line` / `Text` / `Group`  
+2. `ShapeFactory`：类型名 → `Rect` / `Circle` / `Ellipse` / `Line` / `Text` / `Group`（含 `create` 与 `fromSvg`）
 
 ### 2. 设计模式的选择
 
@@ -75,7 +78,7 @@ package "io" {
 |---|---|---|
 | **Command（必用）** | 一条编辑命令 = 一个可撤销单元 | `ICommand` + 各 `*Command`；`History.execute/undo/redo` |
 | **Composite** | `move` / `scale` / `delete` 等对 `<g>` 与叶子一视同仁 | `Shape` 抽象 + `Group` 递归委托子节点 |
-| **Factory（仅一处）** | `create <type>` 创建对象 | 后续 `ShapeFactory`；方案中标为待重构 |
+| **Factory（仅一处）** | `create <type>` / 读盘建对象 | `ShapeFactory`（待重构标注） |
 
 不采用：贫血 DTO + 到处 `switch(tag)` 的过程式分派（作业范式禁止）。
 
@@ -84,8 +87,8 @@ package "io" {
 允许的依赖方向：
 
 ```text
-cli  →  commands, model, history
-commands  →  model, (调用) history
+cli  →  commands, model, history, io
+commands  →  model
 history  →  commands（仅 ICommand 接口）
 io  →  model
 model  →  （无向上依赖；不依赖 cli / io / commands / history）
@@ -96,70 +99,70 @@ model  →  （无向上依赖；不依赖 cli / io / commands / history）
 | `model` 不依赖 `cli` / `io` | 领域对象与终端、文件系统解耦，便于单测与后续 GUI |
 | `history` 只依赖 `ICommand` | 撤销栈不关心具体编辑细节 |
 | `io` 不依赖 `commands` | 读写是文档态转换，不是用户编辑命令 |
-| `cli` 可依赖各方编排 | 唯一的「组装根」；具体业务仍下沉到 commands |
-
-违反上述方向的 import 视为待处理项，实现后在「一致性自查」中抽样核对。
+| `cli` 可依赖各方编排 | 唯一的「组装根」；具体业务仍下沉到 commands / io |
 
 ### 4. 变化点假设
 
 | # | 可能变化 | 预留 / 不预留 |
 |---|---|---|
-| 1 | 新增图形类型（如后续 `box` 插件） | Phase1 用工厂集中创建；插件插槽留到后续阶段，本阶段不实现 `box` |
+| 1 | 新增图形类型（如后续 `box` 插件） | Phase1 用工厂集中创建；`Shape.canUngroup()` 预留复合类型拒绝 ungroup；本阶段不实现 `box` |
 | 2 | 新增 CLI 命令 | 每个命令一个 `ICommand` 类 + Dispatcher 注册一行 |
-| 3 | 换 XML 解析库 | 隔离在 `io/`，`model` 不变 |
+| 3 | 换 XML 解析库 | 隔离在 `io/`，`model` 不变（当前为最小手写解析） |
 | 4 | 从 CLI 换 GUI / Agent 通道 | 复用 `commands` + `model` + `history`，替换 `cli` |
-| 5 | undo 粒度变为「事务组」 | 可用宏命令（Composite Command）；当前按作业「一命令一单元」不做过度设计 |
+| 5 | undo 粒度变为「事务组」 | 可用宏命令（Composite Command）；当前按作业「一命令一单元」 |
 
 ---
 
 ## 过程记录
 
-（骨架阶段起笔，后续补充真实迭代。）
-
-1. **环境**：Windows PowerShell 下 `mkdir -p src doc` 失败（应用 `New-Item`）；nvm 的 Node 22.21.1 自带 npm 损坏（缺 `cache/policy.js`），改用 Node 20.19.5 后 `npm init` 成功。  
-2. **协作方式**：先定模块边界与 Command/Composite，再搭可运行 REPL（仅 `help` / `init`），避免一次生成全部命令导致无法分步 commit。  
-3. **约束文档**：补充 `AI_GUARDRAILS.md` + `TASK_BOUNDARIES.md`（Exp-0…7），并用 `.cursor/rules` 固化「一次一块、禁 box、禁依赖反转、禁贫血分派」，防止后续 AI 一次生成全命令表。  
-4. **待验证**：Dispatcher 内 `switch` 是否过大——若膨胀，优先抽「命令注册表」但仍保持「分派仅此一处」。
+1. **环境**：Windows PowerShell 下 `mkdir -p` 不可用（改 `New-Item`）；nvm Node 22 npm 缺 `cache/policy.js`，改用 Node 20.19.5。  
+2. **协作方式**：按 `TASK_BOUNDARIES` Exp-0…5 分步实现并分次 commit，避免一次生成全命令表。  
+3. **约束文档**：`AI_GUARDRAILS.md` + `TASK_BOUNDARIES.md` + `.cursor/rules` 固化边界。  
+4. **Exp-2…5**：Command 编辑 / 分组 z-order / scale·canvas / save·read；验收脚本对齐规格回显。  
+5. **Exp-6（2026-10-23）**：回放 §6 与 §6.1 版本 A；逐条核对 §4.2；抽样 import；导出 `demo.svg` / `flowchart.svg` 供浏览器预览。  
+   - AI/协作问题：长时间运行的旧 `npm run cli` 未加载新命令（表现为 `unknown command: group`）→ 须重启 REPL。  
+   - 磁盘短暂 ENOSPC / npm 异常退出 → 清理后重试。  
+   - 对照：`phase_cli_1.md` §4.2 / §6；纠正：文档与验收记录，无改规格未定义行为。  
+6. **待 Exp-7**：过程记录定稿、推远程、tag `final`。
 
 ---
 
 ## 一致性自查
 
-| 问题 | 现状（骨架） |
+| 问题 | 现状（Exp-6） |
 |---|---|
-| 模块划分是否与方案一致？ | 是：`cli` / `commands` / `model` / `history` / `io` 目录已建 |
-| 依赖方向是否被违反？ | 抽样：`model` 无向上 import；`History` 仅依赖 `ICommand`；`io` 仅依赖 `Document` |
-
-实现全部命令后需再跑一遍 import 抽样。
+| 模块划分是否与方案一致？ | 是：`cli` / `commands` / `model` / `history` / `io` |
+| 依赖方向是否被违反？ | **通过**：`model` 仅互引；`history` 仅 `ICommand`；`io` → `model`（+ `ShapeFactory`）；`commands` → `model`；`cli` 组装各方。未见 `model→cli/io/commands` |
+| 按名字分派是否只有两处？ | 是：`CommandDispatcher` + `ShapeFactory` |
+| `create box`？ | `error: unknown shape type: box (is the plugin loaded?)` |
+| Composite ungroup？ | `Shape.canUngroup()`：普通 `g` 为 true；无 box 时无触发 `cannot ungroup composite shape` 路径（接口已预留） |
 
 ---
 
 ## 质量保证手段
 
-计划（随功能补齐）：
+1. **手工回放**：`phase_cli_1.md` §6 与 §6.1 版本 A（不含版本 B / box）已跑通。  
+2. **错误表对照**：§4.2 各条造失败用例，文案一致（含 `cannot write file`）。  
+3. **浏览器预览**：`save` 产物 `demo.svg`、`flowchart.svg` 为合法 SVG（可用浏览器 / SVG Preview 打开）。  
+4. **git 分步提交**：每 Exp 一次 commit（见 `git log`）。  
+5. （可选）后续可为 `tokenize` / `History` 补单元测试。
 
-1. **手工回放**：对照 `phase_cli_1.md` 第 6 节典型会话，逐条比对输出。  
-2. **错误表对照**：4.2 错误文案逐条造失败用例。  
-3. **浏览器预览**：`save` 出的 `.svg` 用浏览器 / VSCode SVG Preview 打开。  
-4. **git 分步提交**：每完成一类命令一次 commit，最终打 tag `final`。  
-5. （可选）对 `tokenize`、`History`、Composite `move` 补单元测试。
+### Exp-6 验收要点（摘要）
+
+| 用例 | 结果 |
+|---|---|
+| §6 全会话 | move/undo/redo、set/undo、group 子孙错误、delete/undo、save 后 undo 禁止、read other.svg 警告与 tree |
+| §6.1A 流程图 | `in` 建树、`move node2`、`set process-label`、`save flowchart.svg (8 elements)` |
+| §4.2 | id 冲突 / 不存在 / container / 类型 / top-level ungroup / scale≤0 / 读写失败 / 未 init |
 
 ---
 
 ## 运行方式
 
 ```bash
-# 若刚换过 nvm 版本，先：
-nvm use 20.19.5
-
+nvm use 20.19.5   # 若刚换过 nvm 版本
 npm install
 npm run cli
 ```
 
-当前骨架已支持：
-
-```text
-svg> help
-svg> init 800 600
-canvas 800x600 created
-```
+改代码后须 **重启** `npm run cli`（tsx 不热更新已运行进程）。
