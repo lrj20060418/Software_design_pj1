@@ -115,7 +115,7 @@ export class Document {
     this.parentIds.set(id, containerId);
   }
 
-  /** 供后续 undo 使用：从树与索引中移除（不递归删子孙的索引由调用方保证） */
+  /** 供 CreateCommand.undo：从树与索引中移除单节点（不递归） */
   detachShape(id: string): Shape {
     const shape = this.requireShape(id);
     const parentId = this.parentIds.get(id) ?? null;
@@ -135,6 +135,86 @@ export class Document {
     this.shapes.delete(id);
     this.parentIds.delete(id);
     return shape;
+  }
+
+  /**
+   * 删除子树：从父容器摘下，并注销自身与全部子孙的 id 索引。
+   * 对象树仍保留在返回的 shape 上，供 undo 恢复。
+   */
+  removeSubtree(id: string): { shape: Shape; parentId: string | null; index: number } {
+    const shape = this.requireShape(id);
+    const parentId = this.parentIds.get(id) ?? null;
+    let index = 0;
+
+    if (parentId === null) {
+      index = this.roots.indexOf(shape);
+      if (index >= 0) {
+        this.roots.splice(index, 1);
+      } else {
+        index = 0;
+      }
+    } else {
+      const parent = this.shapes.get(parentId);
+      if (!(parent instanceof Group)) {
+        throw new Error(`error: not a container: ${parentId}`);
+      }
+      index = parent.indexOfChild(shape);
+      parent.removeChild(shape);
+    }
+
+    this.unregisterSubtree(shape);
+    return { shape, parentId, index };
+  }
+
+  /** 将 removeSubtree 摘下的子树插回原位置并重建索引 */
+  restoreSubtree(
+    shape: Shape,
+    parentId: string | null,
+    index: number,
+  ): void {
+    this.ensureReady();
+    if (this.shapes.has(shape.getId())) {
+      throw new Error(`error: id already exists: ${shape.getId()}`);
+    }
+
+    if (parentId === null) {
+      const clamped = Math.max(0, Math.min(index, this.roots.length));
+      this.roots.splice(clamped, 0, shape);
+      this.registerSubtree(shape, null);
+      return;
+    }
+
+    const parent = this.shapes.get(parentId);
+    if (!parent) {
+      throw new Error(`error: no such container: ${parentId}`);
+    }
+    if (!(parent instanceof Group)) {
+      throw new Error(`error: not a container: ${parentId}`);
+    }
+
+    parent.insertChildAt(shape, index);
+    this.registerSubtree(shape, parentId);
+  }
+
+  private registerSubtree(shape: Shape, parentId: string | null): void {
+    const id = shape.getId();
+    this.shapes.set(id, shape);
+    this.parentIds.set(id, parentId);
+    if (shape instanceof Group) {
+      for (const child of shape.getChildren()) {
+        this.registerSubtree(child, id);
+      }
+    }
+  }
+
+  private unregisterSubtree(shape: Shape): void {
+    if (shape instanceof Group) {
+      for (const child of shape.getChildren()) {
+        this.unregisterSubtree(child);
+      }
+    }
+    this.shapes.delete(shape.getId());
+    this.parentIds.delete(shape.getId());
   }
 
   parentRefOf(id: string): string {

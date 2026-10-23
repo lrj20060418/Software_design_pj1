@@ -27,6 +27,19 @@ export class Group extends Shape {
     return true;
   }
 
+  insertChildAt(shape: Shape, index: number): void {
+    const clamped = Math.max(0, Math.min(index, this.children.length));
+    this.children.splice(clamped, 0, shape);
+  }
+
+  indexOfChild(shape: Shape): number {
+    return this.children.indexOf(shape);
+  }
+
+  describePosition(): string {
+    return "";
+  }
+
   move(dx: number, dy: number): void {
     for (const child of this.children) {
       child.move(dx, dy);
@@ -39,7 +52,11 @@ export class Group extends Shape {
     }
   }
 
-  setAttribute(attr: string, _value: string): void {
+  setAttribute(attr: string, _value: string | undefined): void {
+    throw new Error(`error: unknown attribute: ${attr}`);
+  }
+
+  getAttribute(attr: string): string | undefined {
     throw new Error(`error: unknown attribute: ${attr}`);
   }
 

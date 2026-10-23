@@ -2,6 +2,9 @@ import { Document } from "../model/Document.js";
 import { History } from "../history/History.js";
 import { ShapeFactory } from "../model/ShapeFactory.js";
 import { CreateCommand } from "../commands/CreateCommand.js";
+import { MoveCommand } from "../commands/MoveCommand.js";
+import { SetCommand } from "../commands/SetCommand.js";
+import { DeleteCommand } from "../commands/DeleteCommand.js";
 import { tokenize } from "./tokenize.js";
 
 /**
@@ -34,6 +37,16 @@ export class CommandDispatcher {
         return this.tree(args);
       case "show":
         return this.show(args);
+      case "move":
+        return this.move(args);
+      case "set":
+        return this.set(args);
+      case "delete":
+        return this.delete(args);
+      case "undo":
+        return this.undo(args);
+      case "redo":
+        return this.redo(args);
       default:
         return `error: unknown command: ${name}`;
     }
@@ -44,6 +57,10 @@ export class CommandDispatcher {
       "Commands:",
       "  init [w] [h]                         create empty canvas (default 800x600)",
       "  create <type> <id> [params…] [in <g>]  create shape (rect/circle/ellipse/line/text/g)",
+      "  move <id> <dx> <dy>                  translate shape",
+      "  set <id> <attr> <value>              set attribute",
+      "  delete <id>                         delete shape (and descendants)",
+      "  undo / redo                         undo or redo last edit",
       "  tree [id]                            show structure tree",
       "  show <id>                            show shape attributes",
       "  help                                 show this help",
@@ -98,6 +115,65 @@ export class CommandDispatcher {
 
     const command = new CreateCommand(this.document, shape, containerId);
     return this.history.execute(command);
+  }
+
+  private move(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 3) {
+      return "error: usage: move <id> <dx> <dy>";
+    }
+
+    const id = args[0];
+    const dx = Number(args[1]);
+    const dy = Number(args[2]);
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) {
+      return "error: usage: move <id> <dx> <dy>";
+    }
+
+    const shape = this.document.requireShape(id);
+    return this.history.execute(new MoveCommand(shape, dx, dy));
+  }
+
+  private set(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 3) {
+      return "error: usage: set <id> <attr> <value>";
+    }
+
+    const [id, attr, value] = args;
+    const shape = this.document.requireShape(id);
+
+    try {
+      const command = new SetCommand(shape, attr, value);
+      return this.history.execute(command);
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  private delete(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 1) {
+      return "error: usage: delete <id>";
+    }
+
+    const id = args[0];
+    this.document.requireShape(id);
+    return this.history.execute(new DeleteCommand(this.document, id));
+  }
+
+  private undo(args: string[]): string {
+    if (args.length !== 0) {
+      return "error: usage: undo";
+    }
+    return this.history.undo();
+  }
+
+  private redo(args: string[]): string {
+    if (args.length !== 0) {
+      return "error: usage: redo";
+    }
+    return this.history.redo();
   }
 
   private tree(args: string[]): string {

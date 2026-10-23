@@ -28,6 +28,10 @@ export class Line extends Shape {
     return "line";
   }
 
+  describePosition(): string {
+    return `(${this.x1},${this.y1})`;
+  }
+
   move(dx: number, dy: number): void {
     this.x1 += dx;
     this.y1 += dy;
@@ -42,7 +46,7 @@ export class Line extends Shape {
     this.y2 *= factor;
   }
 
-  setAttribute(attr: string, value: string): void {
+  setAttribute(attr: string, value: string | undefined): void {
     switch (attr) {
       case "x1":
         this.x1 = Number(value);
@@ -64,6 +68,25 @@ export class Line extends Shape {
         break;
       case "fill":
         throw new Error(`error: unknown attribute: ${attr}`);
+      default:
+        throw new Error(`error: unknown attribute: ${attr}`);
+    }
+  }
+
+  getAttribute(attr: string): string | undefined {
+    switch (attr) {
+      case "x1":
+        return String(this.x1);
+      case "y1":
+        return String(this.y1);
+      case "x2":
+        return String(this.x2);
+      case "y2":
+        return String(this.y2);
+      case "stroke":
+        return this.stroke;
+      case "stroke-width":
+        return this.strokeWidth;
       default:
         throw new Error(`error: unknown attribute: ${attr}`);
     }

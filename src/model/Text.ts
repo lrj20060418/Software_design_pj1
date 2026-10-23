@@ -23,6 +23,10 @@ export class Text extends Shape {
     return this.content;
   }
 
+  describePosition(): string {
+    return `(${this.x},${this.y})`;
+  }
+
   move(dx: number, dy: number): void {
     this.x += dx;
     this.y += dy;
@@ -33,7 +37,7 @@ export class Text extends Shape {
     this.y *= factor;
   }
 
-  setAttribute(attr: string, value: string): void {
+  setAttribute(attr: string, value: string | undefined): void {
     switch (attr) {
       case "x":
         this.x = Number(value);
@@ -42,6 +46,9 @@ export class Text extends Shape {
         this.y = Number(value);
         break;
       case "text":
+        if (value === undefined) {
+          throw new Error(`error: unknown attribute: ${attr}`);
+        }
         this.content = value;
         break;
       case "fill":
@@ -53,6 +60,25 @@ export class Text extends Shape {
       case "stroke-width":
         this.strokeWidth = value;
         break;
+      default:
+        throw new Error(`error: unknown attribute: ${attr}`);
+    }
+  }
+
+  getAttribute(attr: string): string | undefined {
+    switch (attr) {
+      case "x":
+        return String(this.x);
+      case "y":
+        return String(this.y);
+      case "text":
+        return this.content;
+      case "fill":
+        return this.fill;
+      case "stroke":
+        return this.stroke;
+      case "stroke-width":
+        return this.strokeWidth;
       default:
         throw new Error(`error: unknown attribute: ${attr}`);
     }

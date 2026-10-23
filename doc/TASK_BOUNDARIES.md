@@ -14,7 +14,7 @@
 |---|---|---|---|
 | Exp-0 | 工程骨架 + REPL + `help`/`init` | `[x]` | §2 提示符；文档类 init |
 | Exp-1 | 图形模型 + `create` + `tree`/`show` | `[x]` | §4.1；§5 |
-| Exp-2 | Command + `move`/`set`/`delete` + undo/redo | `[ ]` | §3 编辑类；§4.3 |
+| Exp-2 | Command + `move`/`set`/`delete` + undo/redo | `[x]` | §3 编辑类；§4.3 |
 | Exp-3 | 结构：`group`/`ungroup`/`addto`/`front`/`back` | `[ ]` | §3；§4.2 错误 |
 | Exp-4 | `scale` + `canvas` | `[ ]` | §3；§4.2 scale |
 | Exp-5 | `save`/`read` + 缺 id 警告 | `[ ]` | §3 文档类；§0 SVG |

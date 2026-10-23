@@ -11,11 +11,17 @@ export abstract class Shape {
 
   abstract getType(): string;
 
+  /** 叶子锚点，供 move 成功回显 `moved to (x,y)` */
+  abstract describePosition(): string;
+
   abstract move(dx: number, dy: number): void;
 
   abstract scale(factor: number): void;
 
-  abstract setAttribute(attr: string, value: string): void;
+  /** 白名单外抛 `error: unknown attribute`；`undefined` 表示清除可选属性 */
+  abstract setAttribute(attr: string, value: string | undefined): void;
+
+  abstract getAttribute(attr: string): string | undefined;
 
   abstract toTreeLine(indent: string, isLast: boolean): string[];
 

@@ -20,6 +20,10 @@ export class Circle extends Shape {
     return "circle";
   }
 
+  describePosition(): string {
+    return `(${this.cx},${this.cy})`;
+  }
+
   move(dx: number, dy: number): void {
     this.cx += dx;
     this.cy += dy;
@@ -31,7 +35,7 @@ export class Circle extends Shape {
     this.r *= factor;
   }
 
-  setAttribute(attr: string, value: string): void {
+  setAttribute(attr: string, value: string | undefined): void {
     switch (attr) {
       case "cx":
         this.cx = Number(value);
@@ -51,6 +55,25 @@ export class Circle extends Shape {
       case "stroke-width":
         this.strokeWidth = value;
         break;
+      default:
+        throw new Error(`error: unknown attribute: ${attr}`);
+    }
+  }
+
+  getAttribute(attr: string): string | undefined {
+    switch (attr) {
+      case "cx":
+        return String(this.cx);
+      case "cy":
+        return String(this.cy);
+      case "r":
+        return String(this.r);
+      case "fill":
+        return this.fill;
+      case "stroke":
+        return this.stroke;
+      case "stroke-width":
+        return this.strokeWidth;
       default:
         throw new Error(`error: unknown attribute: ${attr}`);
     }
