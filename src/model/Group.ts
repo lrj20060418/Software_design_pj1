@@ -10,8 +10,16 @@ export class Group extends Shape {
     return "g";
   }
 
+  override canUngroup(): boolean {
+    return true;
+  }
+
   getChildren(): readonly Shape[] {
     return this.children;
+  }
+
+  clearChildren(): Shape[] {
+    return this.children.splice(0, this.children.length);
   }
 
   addChild(shape: Shape): void {

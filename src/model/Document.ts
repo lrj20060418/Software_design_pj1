@@ -196,6 +196,103 @@ export class Document {
     this.registerSubtree(shape, parentId);
   }
 
+  /** 在同级兄弟中的下标（根级相对于 roots） */
+  siblingIndex(id: string): number {
+    const shape = this.requireShape(id);
+    const parentId = this.parentIds.get(id) ?? null;
+    if (parentId === null) {
+      return this.roots.indexOf(shape);
+    }
+    const parent = this.shapes.get(parentId);
+    if (!(parent instanceof Group)) {
+      throw new Error(`error: not a container: ${parentId}`);
+    }
+    return parent.indexOfChild(shape);
+  }
+
+  /** ancestorId 是否为 descendantId 的祖先（含相等则 false） */
+  isAncestorOf(ancestorId: string, descendantId: string): boolean {
+    let current: string | null | undefined = this.parentIds.get(descendantId);
+    while (current !== null && current !== undefined) {
+      if (current === ancestorId) {
+        return true;
+      }
+      current = this.parentIds.get(current);
+    }
+    return false;
+  }
+
+  /**
+   * 仅从父容器/根摘下，保留 shapes 索引（用于 reparent）。
+   */
+  unlinkFromParent(id: string): { parentId: string | null; index: number } {
+    const shape = this.requireShape(id);
+    const parentId = this.parentIds.get(id) ?? null;
+    let index = 0;
+
+    if (parentId === null) {
+      index = this.roots.indexOf(shape);
+      if (index >= 0) {
+        this.roots.splice(index, 1);
+      } else {
+        index = 0;
+      }
+    } else {
+      const parent = this.shapes.get(parentId);
+      if (!(parent instanceof Group)) {
+        throw new Error(`error: not a container: ${parentId}`);
+      }
+      index = parent.indexOfChild(shape);
+      parent.removeChild(shape);
+    }
+
+    return { parentId, index };
+  }
+
+  /** 挂到指定父级与下标；调用前 shape 须已在索引中且已 unlink */
+  linkToParent(id: string, parentId: string | null, index: number): void {
+    const shape = this.requireShape(id);
+
+    if (parentId === null) {
+      const clamped = Math.max(0, Math.min(index, this.roots.length));
+      this.roots.splice(clamped, 0, shape);
+      this.parentIds.set(id, null);
+      return;
+    }
+
+    const parent = this.shapes.get(parentId);
+    if (!parent) {
+      throw new Error(`error: no such container: ${parentId}`);
+    }
+    if (!(parent instanceof Group)) {
+      throw new Error(`error: not a container: ${parentId}`);
+    }
+    parent.insertChildAt(shape, index);
+    this.parentIds.set(id, parentId);
+  }
+
+  /** 将已登记的空 Group 挂到父级（group 命令用） */
+  placeGroup(group: Group, parentId: string | null, index: number): void {
+    const id = group.getId();
+    if (this.shapes.has(id)) {
+      throw new Error(`error: id already exists: ${id}`);
+    }
+    this.shapes.set(id, group);
+    this.linkToParent(id, parentId, index);
+  }
+
+  /** 仅注销 Group 自身（子节点须已提升走） */
+  unregisterGroupNode(id: string): Group {
+    const shape = this.requireShape(id);
+    if (!(shape instanceof Group)) {
+      throw new Error(`error: not a container: ${id}`);
+    }
+    this.unlinkFromParent(id);
+    this.shapes.delete(id);
+    this.parentIds.delete(id);
+    return shape;
+  }
+
   private registerSubtree(shape: Shape, parentId: string | null): void {
     const id = shape.getId();
     this.shapes.set(id, shape);

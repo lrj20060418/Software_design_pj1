@@ -5,6 +5,11 @@ import { CreateCommand } from "../commands/CreateCommand.js";
 import { MoveCommand } from "../commands/MoveCommand.js";
 import { SetCommand } from "../commands/SetCommand.js";
 import { DeleteCommand } from "../commands/DeleteCommand.js";
+import { GroupCommand } from "../commands/GroupCommand.js";
+import { UngroupCommand } from "../commands/UngroupCommand.js";
+import { AddToCommand } from "../commands/AddToCommand.js";
+import { FrontCommand } from "../commands/FrontCommand.js";
+import { BackCommand } from "../commands/BackCommand.js";
 import { tokenize } from "./tokenize.js";
 
 /**
@@ -43,6 +48,16 @@ export class CommandDispatcher {
         return this.set(args);
       case "delete":
         return this.delete(args);
+      case "group":
+        return this.group(args);
+      case "ungroup":
+        return this.ungroup(args);
+      case "addto":
+        return this.addto(args);
+      case "front":
+        return this.front(args);
+      case "back":
+        return this.back(args);
       case "undo":
         return this.undo(args);
       case "redo":
@@ -60,6 +75,10 @@ export class CommandDispatcher {
       "  move <id> <dx> <dy>                  translate shape",
       "  set <id> <attr> <value>              set attribute",
       "  delete <id>                         delete shape (and descendants)",
+      "  group <gid> <id1> <id2>…             create g and adopt shapes",
+      "  ungroup <gid>                       dissolve nested g",
+      "  addto <gid> <id>                    move shape into g",
+      "  front <id> / back <id>              z-order among siblings",
       "  undo / redo                         undo or redo last edit",
       "  tree [id]                            show structure tree",
       "  show <id>                            show shape attributes",
@@ -160,6 +179,83 @@ export class CommandDispatcher {
     const id = args[0];
     this.document.requireShape(id);
     return this.history.execute(new DeleteCommand(this.document, id));
+  }
+
+  private group(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length < 2) {
+      return "error: usage: group <newGid> <id1> <id2>…";
+    }
+
+    const newGid = args[0];
+    const memberIds = args.slice(1);
+
+    if (this.document.hasId(newGid)) {
+      return `error: id already exists: ${newGid}`;
+    }
+
+    for (const id of memberIds) {
+      this.document.requireShape(id);
+    }
+
+    for (let i = 0; i < memberIds.length; i++) {
+      for (let j = 0; j < memberIds.length; j++) {
+        if (i === j) {
+          continue;
+        }
+        if (this.document.isAncestorOf(memberIds[i], memberIds[j])) {
+          return `error: cannot group a container into its own descendant: ${memberIds[i]}`;
+        }
+      }
+    }
+
+    return this.history.execute(
+      new GroupCommand(this.document, newGid, memberIds),
+    );
+  }
+
+  private ungroup(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 1) {
+      return "error: usage: ungroup <gid>";
+    }
+
+    try {
+      return this.history.execute(new UngroupCommand(this.document, args[0]));
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  private addto(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 2) {
+      return "error: usage: addto <gid> <id>";
+    }
+
+    try {
+      return this.history.execute(
+        new AddToCommand(this.document, args[0], args[1]),
+      );
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  private front(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 1) {
+      return "error: usage: front <id>";
+    }
+    return this.history.execute(new FrontCommand(this.document, args[0]));
+  }
+
+  private back(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 1) {
+      return "error: usage: back <id>";
+    }
+    return this.history.execute(new BackCommand(this.document, args[0]));
   }
 
   private undo(args: string[]): string {

@@ -23,6 +23,13 @@ export abstract class Shape {
 
   abstract getAttribute(attr: string): string | undefined;
 
+  /**
+   * 是否允许 ungroup。普通 g 为 true；复合类型（如未来 box）覆写为 false。
+   */
+  canUngroup(): boolean {
+    return false;
+  }
+
   abstract toTreeLine(indent: string, isLast: boolean): string[];
 
   abstract toShowLines(parentRef: string): string[];
