@@ -15,7 +15,8 @@
     "check:b0": "tsx scripts/check-b0.ts",
     "check:b1": "tsx scripts/check-b1.ts",
     "check:t0": "tsx scripts/check-t0.ts",
-    "check:a0": "tsx scripts/check-a0.ts"
+    "check:a0": "tsx scripts/check-a0.ts",
+    "check:x0": "tsx scripts/check-x0.ts"
   },
   "keywords": [],
   "author": "",

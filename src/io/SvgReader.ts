@@ -54,7 +54,9 @@ export class SvgReader {
     warnings: string[],
   ): Shape | null {
     const tag = node.tag.toLowerCase();
-    if (!this.shapeFactory.supports(tag)) {
+    // data-kind 优先（叶子插件如 diamond→polygon）；未注册则回落标签名
+    const logicalType = this.shapeFactory.resolveReadType(tag, node.attrs);
+    if (!this.shapeFactory.supports(logicalType)) {
       return null;
     }
 
@@ -70,7 +72,6 @@ export class SvgReader {
     usedIds.add(id);
 
     if (tag === "g") {
-      const logicalType = this.shapeFactory.resolveReadType("g", node.attrs);
       const group = this.shapeFactory.fromSvg(
         logicalType,
         id,
@@ -87,7 +88,14 @@ export class SvgReader {
     }
 
     const textContent = tag === "text" ? unescapeXml(node.text.trim()) : "";
-    return this.shapeFactory.fromSvg(tag, id, node.attrs, textContent);
+    const shape = this.shapeFactory.fromSvg(
+      logicalType,
+      id,
+      node.attrs,
+      textContent,
+    );
+    this.shapeFactory.complete(logicalType, shape);
+    return shape;
   }
 }
 

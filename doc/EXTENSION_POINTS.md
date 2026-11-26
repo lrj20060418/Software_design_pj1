@@ -4,7 +4,7 @@
 
 | 接口 | 职责 | 内核调用位置 | 已有实现 | 禁用可选扩展时 | 违约/冲突报错 |
 |---|---|---|---|---|---|
-| `IShapeProvider` | 一种图形的 `create` / `fromSvg` / 可选 `complete` | `ShapeFactory`（`src/model/ShapeFactory.ts`）；`SvgReader` → `resolveReadType`（`data-kind`） | 内置六种（`src/builtin/shapes/*`）+ 可选 `box`（`plugins/shape-box`） | 仅六种；`create box` → `error: unknown shape type: box (is the plugin loaded?)` | 未注册 / 重复：`error: duplicate registration: shapes/<name>`；非法 box 在 `complete` 拒绝整次 read |
+| `IShapeProvider` | 一种图形的 `create` / `fromSvg` / 可选 `complete` | `ShapeFactory`（`src/model/ShapeFactory.ts`）；`SvgReader` → `resolveReadType`（`data-kind`，**含叶子**） | 内置六种（`src/builtin/shapes/*`）+ 可选 `box` / `diamond`（`plugins/shape-*`） | 仅六种；`create box|diamond` → unknown shape type | 未注册 / 重复：`error: duplicate registration: shapes/<name>`；非法 box 在 `complete` 拒绝整次 read |
 | `ICliCommand` | 一条 REPL 命令（含 `helpLines`） | `CommandDispatcher.dispatch`（`src/cli/CommandDispatcher.ts`） | Phase 1 内置（`src/builtin/commands/*`）；可选 `stats`、`dir` | 仅内置；未装可选命令 → `error: unknown command: <name>` | 重复：`error: duplicate registration: commands/<name>` |
 | `ITreeDecorator` | 结构树行尾行标签；可选 `onAfterSave` / `onAfterReset` | `EditorSession.tree`；save / init / read 后通知装饰器 | `modified-star`（`plugins/tree-star`）、`box-type-label`（`plugins/tree-box-label`） | 无装饰器时 `createLineHook` 返回 `undefined`，`tree` 与 Phase 1 **逐字节**一致 | 重复：`error: duplicate registration: decorators/<name>`；语义见 ADR-0003 |
 | `IAttributeHandler` | 属性在特定图形上的领域语义 | `EditorSession.set` → `AttributeHandlerRegistry.findHandlers` → `AttributeHandlerCommand` | `box` 的 `fill` / `label`（`plugins/shape-box`） | 无命中走 Phase 1 `SetCommand` 白名单 | 多命中拒绝；`apply` 失败回滚且不入栈；重复：`error: duplicate registration: attributes/<name>`；未知属性仍为 `error: unknown attribute` |

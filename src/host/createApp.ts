@@ -20,6 +20,7 @@ import {
   type DirPluginOptions,
 } from "../../plugins/command-dir/src/index.js";
 import { activate as activateBox } from "../../plugins/shape-box/src/index.js";
+import { activate as activateDiamond } from "../../plugins/shape-diamond/src/index.js";
 import { activate as activateTreeStar } from "../../plugins/tree-star/src/index.js";
 import { activate as activateTreeBoxLabel } from "../../plugins/tree-box-label/src/index.js";
 
@@ -45,9 +46,12 @@ export interface CreateAppOptions {
     stats?: boolean;
     dir?: boolean;
     box?: boolean;
+    diamond?: boolean;
     treeStar?: boolean;
     treeBoxLabel?: boolean;
   };
+  /** 方式 A 下 diamond 插件 options（如默认 fill） */
+  diamond?: { fill?: string };
   dir?: DirPluginOptions;
 }
 
@@ -159,6 +163,15 @@ function registerOptionalPluginsCode(
   }
   if (pluginEnabled(options, "box")) {
     activateCodePlugin(ctx, "plugins/shape-box", activateBox, log);
+  }
+  if (pluginEnabled(options, "diamond")) {
+    activateCodePlugin(
+      ctx,
+      "plugins/shape-diamond",
+      activateDiamond,
+      log,
+      options.diamond as Record<string, unknown> | undefined,
+    );
   }
   if (pluginEnabled(options, "treeBoxLabel")) {
     activateCodePlugin(

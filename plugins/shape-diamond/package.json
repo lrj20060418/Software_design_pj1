@@ -1,0 +1,17 @@
+{
+  "name": "@svgframe/plugin-shape-diamond",
+  "version": "0.1.0",
+  "description": "Shape plugin: diamond decision node (PJ1 Phase 2 optional)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "contributes": {
+    "shapes": ["diamond"],
+    "commands": [],
+    "decorators": [],
+    "attributes": []
+  },
+  "license": "ISC"
+}

@@ -477,6 +477,6 @@ Exp-V0 → Exp-V1 → Exp-V2
 
 ## 拓展任务（选做，不改评分权重）
 
-- [ ] 再注册一种形状：`diamond` / `arrow` / `swimlane`（任选）接入同一内核
+- [x] 再注册一种形状：`diamond`（判断框）接入同一内核（`plugins/shape-diamond`；`npm run check:x0`）
 - [ ] 或再加一个扩展点（导出格式、日志与编辑时长统计等）
 - [ ] 或接入其他同学插件，验证契约兼容且内核无需修改

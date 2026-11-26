@@ -1,6 +1,10 @@
 {
   "plugins": [
     { "module": "./plugins/shape-box" },
+    {
+      "module": "./plugins/shape-diamond",
+      "options": { "fill": "#f5a623" }
+    },
     { "module": "./plugins/command-stats" },
     { "module": "./plugins/command-dir" },
     { "module": "./plugins/tree-box-label" },
