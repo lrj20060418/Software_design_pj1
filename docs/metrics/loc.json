@@ -1,13 +1,43 @@
 {
-  "generatedAt": "2026-11-26T02:33:32.101Z",
+  "generatedAt": "2026-11-26T02:37:46.860Z",
   "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
   "totals": {
     "kernel": 2275,
-    "assembly": 1214,
-    "plugins": 95,
+    "assembly": 1233,
+    "plugins": 271,
     "other": 0
   },
   "files": [
+    {
+      "file": "plugins/command-dir/src/DirCliCommand.ts",
+      "bucket": "plugins",
+      "lines": 33
+    },
+    {
+      "file": "plugins/command-dir/src/FakeDirectoryAccess.ts",
+      "bucket": "plugins",
+      "lines": 30
+    },
+    {
+      "file": "plugins/command-dir/src/formatDirListing.ts",
+      "bucket": "plugins",
+      "lines": 30
+    },
+    {
+      "file": "plugins/command-dir/src/IDirectoryAccess.ts",
+      "bucket": "plugins",
+      "lines": 19
+    },
+    {
+      "file": "plugins/command-dir/src/index.ts",
+      "bucket": "plugins",
+      "lines": 33
+    },
+    {
+      "file": "plugins/command-dir/src/NodeFsDirectoryAccess.ts",
+      "bucket": "plugins",
+      "lines": 31
+    },
     {
       "file": "plugins/command-stats/src/collectStats.ts",
       "bucket": "plugins",
@@ -296,7 +326,7 @@
     {
       "file": "src/host/createApp.ts",
       "bucket": "assembly",
-      "lines": 61
+      "lines": 80
     },
     {
       "file": "src/host/EditorSession.ts",

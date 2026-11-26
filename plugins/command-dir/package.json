@@ -1,0 +1,14 @@
+{
+  "name": "@svgframe/plugin-command-dir",
+  "version": "0.1.0",
+  "description": "CLI command plugin: dir with filesystem adapter (PJ1 Phase 2 Exp-C1)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "contributes": {
+    "commands": ["dir"]
+  },
+  "license": "ISC"
+}
