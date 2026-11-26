@@ -13,4 +13,10 @@ export interface IShapeProvider {
 
   /** 由 SVG 元素属性构造图形（read 路径） */
   fromSvg(id: string, attrs: Record<string, string>, textContent?: string): Shape;
+
+  /**
+   * 容器子节点挂载完毕后的校验/收尾（可选）。
+   * 失败应抛 `error: …`，由读入路径中止并保持原文档。
+   */
+  complete?(shape: Shape): void;
 }

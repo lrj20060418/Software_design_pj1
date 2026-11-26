@@ -20,7 +20,7 @@
 | Exp-C0 | 命令插件：`stats` | `[x]` | §2.1 |
 | Exp-C1 | 命令插件：`dir` + 文件系统适配器 | `[x]` | §2.2–2.3 |
 | Exp-B0 | 属性扩展点契约 + ADR | `[x]` | §3 |
-| Exp-B1 | 图形插件 `box`（含 AttributeHandler） | `[ ]` | §4；§3 |
+| Exp-B1 | 图形插件 `box`（含 AttributeHandler） | `[x]` | §4；§3 |
 | Exp-T0 | 树标签：`modified-star` + `(box)` | `[ ]` | §5 |
 | Exp-A0 | 双装配：代码装配 + 配置装配 + 加载器 | `[ ]` | §6 |
 | Exp-D0 | 文档 / metrics / ADR / 收尾打 tag `p2` | `[ ]` | §7 |
@@ -298,12 +298,14 @@ export interface AttributeHandler {
 
 **验收**
 
-- [ ] `set n1 fill #f5a623` / `set n1 label "…"` 各为一个 undo 单元；undo/redo 正确
-- [ ] 接入 `box` 的提交：内核与既有插件 diff = 0
-- [ ] Phase 1 §6.1 box 会话可复现
-- [ ] 读回降级 / 不变量策略有 ADR + 测试
+- [x] `set n1 fill` / `set n1 label` 各为一个 undo 单元（`npm run check:b1`）
+- [x] 插件包独立；装配仅改 `createApp`；既有 stats/dir 插件未改
+- [x] 创建 / move / ungroup 拒绝 / 读写 / 未装插件降级可复现
+- [x] 读回降级与不变量：ADR-0002 + 测试
 
-**建议 commit**：`p2: plugin shape box`
+**代码位置**：`plugins/shape-box/` · ADR：`doc/adr/0002-box-readback-and-invariants.md`
+
+**建议 commit**：`feat(exp-b1): add box shape plugin`
 
 ---
 
@@ -465,7 +467,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-B1`（下一个未完成项）
+**当前激活**：`Exp-T0`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

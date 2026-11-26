@@ -13,16 +13,18 @@ import {
   activate as activateDir,
   type DirPluginOptions,
 } from "../../plugins/command-dir/src/index.js";
+import { activate as activateBox } from "../../plugins/shape-box/src/index.js";
 
 export interface CreateAppOptions {
   /**
    * 是否默认启用可选插件。默认 true。
-   * 单项可用 `plugins.stats` / `plugins.dir` 覆盖。
+   * 单项可用 `plugins.*` 覆盖。
    */
   enableOptionalPlugins?: boolean;
   plugins?: {
     stats?: boolean;
     dir?: boolean;
+    box?: boolean;
   };
   /** 传给 dir 插件（测试注入 cwd / FakeDirectoryAccess） */
   dir?: DirPluginOptions;
@@ -38,7 +40,7 @@ export interface App {
 
 function pluginEnabled(
   options: CreateAppOptions,
-  name: "stats" | "dir",
+  name: "stats" | "dir" | "box",
 ): boolean {
   const fallback = options.enableOptionalPlugins !== false;
   return options.plugins?.[name] ?? fallback;
@@ -72,6 +74,9 @@ export function createApp(options: CreateAppOptions = {}): App {
   }
   if (pluginEnabled(options, "dir")) {
     activateDir(ctx, options.dir ?? {});
+  }
+  if (pluginEnabled(options, "box")) {
+    activateBox(ctx);
   }
 
   const dispatcher = new CommandDispatcher(ctx.commands);

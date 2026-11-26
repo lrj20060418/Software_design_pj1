@@ -14,6 +14,10 @@ export class CreateCommand implements ICommand {
 
   execute(): string {
     this.document.addShape(this.shape, this.containerId);
+    const custom = this.shape.formatCreated(this.containerId);
+    if (custom !== undefined) {
+      return custom;
+    }
     const type = this.shape.getType();
     const id = this.shape.getId();
     if (this.containerId !== undefined) {
@@ -25,7 +29,7 @@ export class CreateCommand implements ICommand {
   undo(): string {
     const id = this.shape.getId();
     const type = this.shape.getType();
-    this.document.detachShape(id);
+    this.document.removeSubtree(id);
     return `${type}#${id} deleted`;
   }
 }

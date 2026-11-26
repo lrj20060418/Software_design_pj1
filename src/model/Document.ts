@@ -114,9 +114,10 @@ export class Document {
     }
 
     if (containerId === undefined) {
+      // 先检查整棵子树 id，再挂接（复合图形可能自带子节点）
+      this.assertSubtreeIdsAvailable(shape);
       this.roots.push(shape);
-      this.shapes.set(id, shape);
-      this.parentIds.set(id, null);
+      this.registerSubtree(shape, null);
       return;
     }
 
@@ -124,13 +125,35 @@ export class Document {
     if (!container) {
       throw new Error(`error: no such container: ${containerId}`);
     }
-    if (!(container instanceof Group)) {
+    if (!container.isContainer() || !(container instanceof Group)) {
       throw new Error(`error: not a container: ${containerId}`);
     }
 
+    this.assertSubtreeIdsAvailable(shape);
     container.addChild(shape);
-    this.shapes.set(id, shape);
-    this.parentIds.set(id, containerId);
+    this.registerSubtree(shape, containerId);
+  }
+
+  /** 收集 shape 子树全部 id（含自身） */
+  collectSubtreeIds(shape: Shape): string[] {
+    const ids = [shape.getId()];
+    if (shape instanceof Group) {
+      for (const child of shape.getChildren()) {
+        ids.push(...this.collectSubtreeIds(child));
+      }
+    }
+    return ids;
+  }
+
+  private assertSubtreeIdsAvailable(shape: Shape): void {
+    const ids = this.collectSubtreeIds(shape);
+    const seen = new Set<string>();
+    for (const sid of ids) {
+      if (seen.has(sid) || this.shapes.has(sid)) {
+        throw new Error(`error: id already exists: ${sid}`);
+      }
+      seen.add(sid);
+    }
   }
 
   /** 供 CreateCommand.undo：从树与索引中移除单节点（不递归） */
@@ -175,6 +198,11 @@ export class Document {
       const parent = this.shapes.get(parentId);
       if (!(parent instanceof Group)) {
         throw new Error(`error: not a container: ${parentId}`);
+      }
+      if (!parent.allowsChildRemoval(id)) {
+        throw new Error(
+          `error: cannot remove required child from composite: ${id}`,
+        );
       }
       index = parent.indexOfChild(shape);
       parent.removeChild(shape);
@@ -259,6 +287,11 @@ export class Document {
       const parent = this.shapes.get(parentId);
       if (!(parent instanceof Group)) {
         throw new Error(`error: not a container: ${parentId}`);
+      }
+      if (!parent.allowsChildRemoval(id)) {
+        throw new Error(
+          `error: cannot remove required child from composite: ${id}`,
+        );
       }
       index = parent.indexOfChild(shape);
       parent.removeChild(shape);
@@ -346,9 +379,8 @@ export class Document {
     if (rootId !== undefined) {
       const shape = this.requireShape(rootId);
       if (shape instanceof Group) {
-        const title = decorate
-          ? decorate(shape, `g#${shape.getId()}`)
-          : `g#${shape.getId()}`;
+        const label = shape.treeLabel();
+        const title = decorate ? decorate(shape, label) : label;
         const lines = [title];
         const children = shape.getChildren();
         children.forEach((child, index) => {

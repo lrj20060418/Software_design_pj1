@@ -24,4 +24,20 @@ export class ShapeFactory {
   supports(type: string): boolean {
     return this.shapes.has(type);
   }
+
+  complete(type: string, shape: Shape): void {
+    this.shapes.get(type)?.complete?.(shape);
+  }
+
+  /**
+   * 读盘时：若元素带 data-kind 且已注册对应 Provider，则用该逻辑类型；
+   * 否则回落为 SVG 标签名（未装插件时 data-kind 复合图形降级为普通 g）。
+   */
+  resolveReadType(tag: string, attrs: Record<string, string>): string {
+    const kind = attrs["data-kind"];
+    if (kind && this.shapes.has(kind)) {
+      return kind;
+    }
+    return tag;
+  }
 }

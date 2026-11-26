@@ -115,7 +115,7 @@ export class EditorSession {
       if (!container) {
         return `error: no such container: ${containerId}`;
       }
-      if (container.getType() !== "g") {
+      if (!container.isContainer()) {
         return `error: not a container: ${containerId}`;
       }
     }
@@ -127,7 +127,13 @@ export class EditorSession {
       return err instanceof Error ? err.message : String(err);
     }
 
-    return this.history.execute(new CreateCommand(this.document, shape, containerId));
+    try {
+      return this.history.execute(
+        new CreateCommand(this.document, shape, containerId),
+      );
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
   }
 
   move(args: string[]): string {
@@ -194,7 +200,11 @@ export class EditorSession {
     }
     const id = args[0];
     this.document.requireShape(id);
-    return this.history.execute(new DeleteCommand(this.document, id));
+    try {
+      return this.history.execute(new DeleteCommand(this.document, id));
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
   }
 
   group(args: string[]): string {

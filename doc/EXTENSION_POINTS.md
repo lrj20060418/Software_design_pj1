@@ -4,7 +4,7 @@
 
 | 接口 | 职责 | 内核调用位置 | 已有实现 | 禁用可选扩展时 | 违约/冲突报错 |
 |---|---|---|---|---|---|
-| `IShapeProvider` | 一种图形的 `create` / `fromSvg` | `ShapeFactory.create` / `fromSvg`（`src/model/ShapeFactory.ts`）；`SvgReader.buildShape` | 内置：`rect` `circle` `ellipse` `line` `text` `g`（`src/builtin/shapes/*`） | 六种图形仍可用 | 未注册：`error: unknown shape type: <t> (is the plugin loaded?)`；重复：`error: duplicate registration: shapes/<t>` |
+| `IShapeProvider` | 一种图形的 `create` / `fromSvg` / 可选 `complete` | `ShapeFactory`；`SvgReader`（`data-kind` → `resolveReadType`） | 内置六种 + 可选 `box`（`plugins/shape-box`） | 仅六种；`create box` → unknown shape type | 未注册 / 重复注册报错；非法 box 结构在 `complete` 拒绝整次 read |
 | `ICliCommand` | 一条 REPL 命令 | `CommandDispatcher.dispatch`（`src/cli/CommandDispatcher.ts`） | Phase 1 全部内置；可选 `stats`（`plugins/command-stats`）、`dir`（`plugins/command-dir`） | 仅内置；未加载的可选命令 → `error: unknown command: <name>` | 未知：`error: unknown command: <name>`；重复：`error: duplicate registration: commands/<name>` |
 
 ### `dir` 与适配器模式

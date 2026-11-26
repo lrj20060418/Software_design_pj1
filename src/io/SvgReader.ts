@@ -70,13 +70,19 @@ export class SvgReader {
     usedIds.add(id);
 
     if (tag === "g") {
-      const group = this.shapeFactory.fromSvg("g", id, node.attrs) as Group;
+      const logicalType = this.shapeFactory.resolveReadType("g", node.attrs);
+      const group = this.shapeFactory.fromSvg(
+        logicalType,
+        id,
+        node.attrs,
+      ) as Group;
       for (const child of node.children) {
         const nested = this.buildShape(child, idCounters, usedIds, warnings);
         if (nested) {
           group.addChild(nested);
         }
       }
+      this.shapeFactory.complete(logicalType, group);
       return group;
     }
 

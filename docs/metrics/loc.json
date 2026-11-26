@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-26T02:37:46.860Z",
+  "generatedAt": "2026-11-26T02:52:28.915Z",
   "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
   "totals": {
-    "kernel": 2275,
-    "assembly": 1233,
-    "plugins": 271,
+    "kernel": 2466,
+    "assembly": 1220,
+    "plugins": 520,
     "other": 0
   },
   "files": [
@@ -52,6 +52,26 @@
       "file": "plugins/command-stats/src/StatsCliCommand.ts",
       "bucket": "plugins",
       "lines": 25
+    },
+    {
+      "file": "plugins/shape-box/src/Box.ts",
+      "bucket": "plugins",
+      "lines": 102
+    },
+    {
+      "file": "plugins/shape-box/src/BoxAttributeHandler.ts",
+      "bucket": "plugins",
+      "lines": 79
+    },
+    {
+      "file": "plugins/shape-box/src/BoxShapeProvider.ts",
+      "bucket": "plugins",
+      "lines": 50
+    },
+    {
+      "file": "plugins/shape-box/src/index.ts",
+      "bucket": "plugins",
+      "lines": 18
     },
     {
       "file": "src/builtin/commands/AddToCliCommand.ts",
@@ -224,6 +244,11 @@
       "lines": 53
     },
     {
+      "file": "src/commands/AttributeHandlerCommand.ts",
+      "bucket": "kernel",
+      "lines": 58
+    },
+    {
       "file": "src/commands/BackCommand.ts",
       "bucket": "kernel",
       "lines": 32
@@ -231,7 +256,7 @@
     {
       "file": "src/commands/CreateCommand.ts",
       "bucket": "kernel",
-      "lines": 32
+      "lines": 36
     },
     {
       "file": "src/commands/DeleteCommand.ts",
@@ -276,7 +301,7 @@
     {
       "file": "src/extensions/AttributeHandlerRegistry.ts",
       "bucket": "kernel",
-      "lines": 24
+      "lines": 29
     },
     {
       "file": "src/extensions/CommandRegistry.ts",
@@ -286,7 +311,7 @@
     {
       "file": "src/extensions/IAttributeHandler.ts",
       "bucket": "kernel",
-      "lines": 15
+      "lines": 48
     },
     {
       "file": "src/extensions/ICliCommand.ts",
@@ -296,7 +321,7 @@
     {
       "file": "src/extensions/IShapeProvider.ts",
       "bucket": "kernel",
-      "lines": 17
+      "lines": 23
     },
     {
       "file": "src/extensions/ITreeDecorator.ts",
@@ -326,17 +351,17 @@
     {
       "file": "src/host/createApp.ts",
       "bucket": "assembly",
-      "lines": 80
+      "lines": 85
     },
     {
       "file": "src/host/EditorSession.ts",
       "bucket": "assembly",
-      "lines": 388
+      "lines": 370
     },
     {
       "file": "src/io/SvgReader.ts",
       "bucket": "kernel",
-      "lines": 235
+      "lines": 241
     },
     {
       "file": "src/io/SvgWriter.ts",
@@ -351,7 +376,7 @@
     {
       "file": "src/model/Document.ts",
       "bucket": "kernel",
-      "lines": 381
+      "lines": 413
     },
     {
       "file": "src/model/Ellipse.ts",
@@ -361,7 +386,7 @@
     {
       "file": "src/model/Group.ts",
       "bucket": "kernel",
-      "lines": 110
+      "lines": 118
     },
     {
       "file": "src/model/Line.ts",
@@ -376,12 +401,12 @@
     {
       "file": "src/model/Shape.ts",
       "bucket": "kernel",
-      "lines": 78
+      "lines": 101
     },
     {
       "file": "src/model/ShapeFactory.ts",
       "bucket": "kernel",
-      "lines": 28
+      "lines": 44
     },
     {
       "file": "src/model/Text.ts",

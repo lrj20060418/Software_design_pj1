@@ -1,16 +1,16 @@
 # Metrics (auto-generated)
 
-Generated: 2026-11-26T02:37:46.860Z
+Generated: 2026-11-26T02:52:28.915Z
 
 ## Lines of code by bucket
 
 | Bucket | Lines |
 |---|---|
-| kernel | 2275 |
-| assembly | 1233 |
-| plugins | 271 |
+| kernel | 2466 |
+| assembly | 1220 |
+| plugins | 520 |
 | other | 0 |
-| **sum** | **3779** |
+| **sum** | **4206** |
 
 ## File inventory
 
@@ -25,6 +25,10 @@ Generated: 2026-11-26T02:37:46.860Z
 | `plugins/command-stats/src/collectStats.ts` | plugins | 57 |
 | `plugins/command-stats/src/index.ts` | plugins | 13 |
 | `plugins/command-stats/src/StatsCliCommand.ts` | plugins | 25 |
+| `plugins/shape-box/src/Box.ts` | plugins | 102 |
+| `plugins/shape-box/src/BoxAttributeHandler.ts` | plugins | 79 |
+| `plugins/shape-box/src/BoxShapeProvider.ts` | plugins | 50 |
+| `plugins/shape-box/src/index.ts` | plugins | 18 |
 | `src/builtin/commands/AddToCliCommand.ts` | assembly | 18 |
 | `src/builtin/commands/BackCliCommand.ts` | assembly | 18 |
 | `src/builtin/commands/CanvasCliCommand.ts` | assembly | 18 |
@@ -59,8 +63,9 @@ Generated: 2026-11-26T02:37:46.860Z
 | `src/cli/Repl.ts` | assembly | 53 |
 | `src/cli/tokenize.ts` | assembly | 40 |
 | `src/commands/AddToCommand.ts` | kernel | 53 |
+| `src/commands/AttributeHandlerCommand.ts` | kernel | 58 |
 | `src/commands/BackCommand.ts` | kernel | 32 |
-| `src/commands/CreateCommand.ts` | kernel | 32 |
+| `src/commands/CreateCommand.ts` | kernel | 36 |
 | `src/commands/DeleteCommand.ts` | kernel | 37 |
 | `src/commands/FrontCommand.ts` | kernel | 43 |
 | `src/commands/GroupCommand.ts` | kernel | 72 |
@@ -69,28 +74,28 @@ Generated: 2026-11-26T02:37:46.860Z
 | `src/commands/ScaleCommand.ts` | kernel | 27 |
 | `src/commands/SetCommand.ts` | kernel | 44 |
 | `src/commands/UngroupCommand.ts` | kernel | 67 |
-| `src/extensions/AttributeHandlerRegistry.ts` | kernel | 24 |
+| `src/extensions/AttributeHandlerRegistry.ts` | kernel | 29 |
 | `src/extensions/CommandRegistry.ts` | kernel | 26 |
-| `src/extensions/IAttributeHandler.ts` | kernel | 15 |
+| `src/extensions/IAttributeHandler.ts` | kernel | 48 |
 | `src/extensions/ICliCommand.ts` | kernel | 15 |
-| `src/extensions/IShapeProvider.ts` | kernel | 17 |
+| `src/extensions/IShapeProvider.ts` | kernel | 23 |
 | `src/extensions/ITreeDecorator.ts` | kernel | 21 |
 | `src/extensions/PluginContext.ts` | kernel | 24 |
 | `src/extensions/ShapeRegistry.ts` | kernel | 36 |
 | `src/extensions/TreeDecoratorRegistry.ts` | kernel | 38 |
 | `src/history/History.ts` | kernel | 59 |
-| `src/host/createApp.ts` | assembly | 80 |
-| `src/host/EditorSession.ts` | assembly | 388 |
-| `src/io/SvgReader.ts` | kernel | 235 |
+| `src/host/createApp.ts` | assembly | 85 |
+| `src/host/EditorSession.ts` | assembly | 370 |
+| `src/io/SvgReader.ts` | kernel | 241 |
 | `src/io/SvgWriter.ts` | kernel | 32 |
 | `src/model/Circle.ts` | kernel | 128 |
-| `src/model/Document.ts` | kernel | 381 |
+| `src/model/Document.ts` | kernel | 413 |
 | `src/model/Ellipse.ts` | kernel | 143 |
-| `src/model/Group.ts` | kernel | 110 |
+| `src/model/Group.ts` | kernel | 118 |
 | `src/model/Line.ts` | kernel | 138 |
 | `src/model/Rect.ts` | kernel | 143 |
-| `src/model/Shape.ts` | kernel | 78 |
-| `src/model/ShapeFactory.ts` | kernel | 28 |
+| `src/model/Shape.ts` | kernel | 101 |
+| `src/model/ShapeFactory.ts` | kernel | 44 |
 | `src/model/Text.ts` | kernel | 130 |
 
 ## Cyclomatic complexity delta

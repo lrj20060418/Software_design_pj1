@@ -45,10 +45,33 @@ export abstract class Shape {
   abstract getAttribute(attr: string): string | undefined;
 
   /**
-   * 是否允许 ungroup。普通 g 为 true；复合类型（如未来 box）覆写为 false。
+   * 是否允许 ungroup。普通 g 为 true；复合类型覆写为 false。
    */
   canUngroup(): boolean {
     return false;
+  }
+
+  /** 是否可作为 `in` / addto 的父容器 */
+  isContainer(): boolean {
+    return false;
+  }
+
+  /**
+   * 是否允许卸下指定子节点（delete / addto 移走）。
+   * 复合图形可拒绝拆必要子部件。
+   */
+  allowsChildRemoval(_childId: string): boolean {
+    return true;
+  }
+
+  /** 结构树节点标题（不含缩进与分支符） */
+  treeLabel(): string {
+    return `${this.getType()}#${this.id}`;
+  }
+
+  /** 若返回字符串，则覆盖默认的 `type#id created` 回显 */
+  formatCreated(_containerId?: string): string | undefined {
+    return undefined;
   }
 
   /**

@@ -14,6 +14,14 @@ export class Group extends Shape {
     return true;
   }
 
+  override isContainer(): boolean {
+    return true;
+  }
+
+  override treeLabel(): string {
+    return `g#${this.id}`;
+  }
+
   getChildren(): readonly Shape[] {
     return this.children;
   }
@@ -75,7 +83,7 @@ export class Group extends Shape {
   ): string[] {
     const branch = isLast ? "└── " : "├── ";
     const title = this.applyTreeDecorate(
-      `${indent}${branch}g#${this.id}`,
+      `${indent}${branch}${this.treeLabel()}`,
       decorate,
     );
     const lines = [title];
