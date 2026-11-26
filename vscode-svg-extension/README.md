@@ -1,10 +1,11 @@
-# SVG Explorer Badge（Exp-V0）
+# SVG Explorer Badge & Outline（Exp-V0 / Exp-V1）
 
-在 VSCode Explorer 中为 `.svg` 文件旁显示 `[]` 标记。标记是界面附加信息，**不修改文件名或文件内容**；非 SVG 文件和目录不加标记。
+- **Exp-V0**：Explorer 中 `.svg` 旁显示 `[]`（不改文件名/内容）
+- **Exp-V1**：打开 SVG 后，原生 Outline 展示元素嵌套；点击定位；编辑后更新；残缺 XML 不崩溃
 
 ## 安装 / 启动（调试）
 
-1. 用 VSCode / Cursor 打开本目录 `vscode-svg-extension`（不要只打开仓库根，除非自行配置多根工作区）。
+1. 用 VSCode / Cursor 打开本目录 `vscode-svg-extension`，或打开**仓库根目录**。
 2. 安装依赖并编译（本机若 `npm install` 异常，可用 `pnpm`）：
 
 ```bash
@@ -13,24 +14,30 @@ pnpm install   # 或：npm install
 pnpm run compile
 ```
 
-也可在**仓库根目录**打开工程后，直接选调试配置 **Run SVG Extension (Exp-V0)** 按 `F5`。
+3. 按 `F5`（仓库根选 **Run SVG Extension (Exp-V0)**，或本目录选 **Run SVG Extension**）。
+4. Extension Development Host 会加载 `fixtures`。
+5. 验收：
+   - Explorer：`example.svg` 有 `[]`；`plain.txt` / 目录无标记
+   - 打开 `example.svg`，在 **大纲 (Outline)** 中应看到 `svg → g#flow → rect#start / g#nested → text`
+   - 点击 `rect#start` 应跳到对应源码行
+   - 编辑后大纲刷新；打开 `broken.svg` 不崩溃（大纲可暂时为空或部分）
 
-3. 按 `F5`（或运行调试配置 **Run SVG Extension**）。
-4. 会打开 Extension Development Host，并加载 `fixtures` 文件夹。
-5. 在资源管理器中确认：
-   - `example.svg` 右侧有 `[]`
-   - `plain.txt`、`session.txt`、目录无标记
-   - 文件名与内容未被改动
+## 静态验收
+
+```bash
+pnpm run check:v0
+pnpm run check:v1
+```
 
 ## 实现说明
 
 | 类 / 入口 | 职责 |
 |---|---|
-| `src/extension.ts` | `activate` 时向 VSCode 注册装饰提供者 |
-| `src/SvgFileDecorationProvider.ts` | 实现 `FileDecorationProvider`；仅对 `.svg` 返回 badge `[]` |
-
-VSCode 在 Explorer 渲染文件时调用 `provideFileDecoration(uri)`；本扩展只在后缀为 `.svg` 时返回装饰，否则返回 `undefined`（不加标记）。
+| `src/extension.ts` | 注册文件装饰与 DocumentSymbolProvider |
+| `src/SvgFileDecorationProvider.ts` | `.svg` → badge `[]` |
+| `src/SvgOutlineParser.ts` | 纯解析：嵌套树 / `tag#id` / 残缺容错 |
+| `src/SvgDocumentSymbolProvider.ts` | 将解析树映射为 Outline 符号 |
 
 ## 示例文件
 
-见 [`fixtures/`](./fixtures/)：`example.svg`（应有标记）、`plain.txt` / `session.txt`（不应有标记）。
+见 [`fixtures/`](./fixtures/)：`example.svg`、`broken.svg`、`plain.txt`、`session.txt`。

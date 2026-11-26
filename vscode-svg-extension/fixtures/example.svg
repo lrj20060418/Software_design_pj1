@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120" id="root">
-  <rect id="bg" x="0" y="0" width="200" height="120" fill="#f0f0f0"/>
-  <g id="group1">
-    <circle id="c1" cx="60" cy="60" r="30" fill="#4a90d9"/>
-    <text id="label" x="110" y="65" font-size="14">Hello</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+  <g id="flow">
+    <rect id="start" x="20" y="20" width="120" height="60"/>
+    <g id="nested">
+      <text x="30" y="50">Hello &amp; SVG</text>
+    </g>
   </g>
 </svg>

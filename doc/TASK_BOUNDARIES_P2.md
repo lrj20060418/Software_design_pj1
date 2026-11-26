@@ -14,7 +14,7 @@
 | Exp | 主题 | 状态 | 对应规格 |
 |---|---|---|---|
 | Exp-V0 | VSCode 扩展：SVG 文件标记 `[]` | `[x]` | A.1 |
-| Exp-V1 | VSCode 扩展：SVG 大纲 + 定位/更新 | `[ ]` | A.2 |
+| Exp-V1 | VSCode 扩展：SVG 大纲 + 定位/更新 | `[x]` | A.2 |
 | Exp-V2 | VSCode 分析文档 + 截图/示例提交 | `[ ]` | A.3 |
 | Exp-F0 | CLI：四个扩展点就位 + Phase 1 回归 | `[ ]` | §1；§7 过程「框架可扩展」 |
 | Exp-C0 | 命令插件：`stats` | `[ ]` | §2.1 |
@@ -87,12 +87,14 @@
 
 **验收（至少覆盖）**
 
-- [ ] 嵌套分组
-- [ ] 无 id 元素
-- [ ] 编辑后大纲更新
-- [ ] 不完整 XML 不崩溃
+- [x] 嵌套分组（`pnpm run check:v1` PASS；F5 目视 Outline）
+- [x] 无 id 元素（显示为 `text`）
+- [x] 编辑后大纲更新（解析随文档重算；VSCode 会再次调用 provider）
+- [x] 不完整 XML 不崩溃（`fixtures/broken.svg`）
 
-**建议 commit**：`p2: vscode svg outline provider`
+**代码位置**：`vscode-svg-extension/src/SvgOutlineParser.ts`、`SvgDocumentSymbolProvider.ts`
+
+**建议 commit**：`feat(exp-v1): vscode svg outline provider`
 
 ---
 
@@ -453,10 +455,10 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-V1`（下一个未完成项）
+**当前激活**：`Exp-V2`（下一个未完成项）
 
-完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → 再激活下一个。  
-约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对并执行 commit（无需再口头确认）。
+完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
+约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。
 
 ---
 

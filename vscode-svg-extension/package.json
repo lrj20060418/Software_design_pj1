@@ -1,8 +1,8 @@
 {
   "name": "svg-explorer-badge",
-  "displayName": "SVG Explorer Badge",
-  "description": "Show [] badge next to .svg files in the Explorer (PJ1 Phase 2 Exp-V0)",
-  "version": "0.1.0",
+  "displayName": "SVG Explorer Badge & Outline",
+  "description": "Explorer [] badge and Outline tree for .svg files (PJ1 Phase 2)",
+  "version": "0.2.0",
   "publisher": "pj1-phase2",
   "engines": {
     "vscode": "^1.85.0"
@@ -11,14 +11,26 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onLanguage:xml",
+    "onLanguage:svg"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "languages": [
+      {
+        "id": "svg",
+        "aliases": ["SVG"],
+        "extensions": [".svg"]
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "check:v0": "node scripts/check-v0.mjs",
+    "check:v1": "node scripts/check-v1.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
