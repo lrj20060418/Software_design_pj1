@@ -6,9 +6,10 @@
     "test": "npm run check:f0",
     "cli": "tsx src/cli/main.ts",
     "build": "tsc",
-    "start": "node dist/cli/main.js",
+    "start": "node dist/src/cli/main.js",
     "metrics": "node scripts/metrics.mjs",
-    "check:f0": "tsx scripts/check-f0.ts"
+    "check:f0": "tsx scripts/check-f0.ts",
+    "check:c0": "tsx scripts/check-c0.ts"
   },
   "keywords": [],
   "author": "",

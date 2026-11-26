@@ -1,13 +1,28 @@
 {
-  "generatedAt": "2026-11-26T02:30:22.617Z",
+  "generatedAt": "2026-11-26T02:33:32.101Z",
   "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
   "totals": {
-    "kernel": 2262,
-    "assembly": 1199,
-    "plugins": 0,
+    "kernel": 2275,
+    "assembly": 1214,
+    "plugins": 95,
     "other": 0
   },
   "files": [
+    {
+      "file": "plugins/command-stats/src/collectStats.ts",
+      "bucket": "plugins",
+      "lines": 57
+    },
+    {
+      "file": "plugins/command-stats/src/index.ts",
+      "bucket": "plugins",
+      "lines": 13
+    },
+    {
+      "file": "plugins/command-stats/src/StatsCliCommand.ts",
+      "bucket": "plugins",
+      "lines": 25
+    },
     {
       "file": "src/builtin/commands/AddToCliCommand.ts",
       "bucket": "assembly",
@@ -261,7 +276,7 @@
     {
       "file": "src/extensions/PluginContext.ts",
       "bucket": "kernel",
-      "lines": 16
+      "lines": 24
     },
     {
       "file": "src/extensions/ShapeRegistry.ts",
@@ -276,12 +291,12 @@
     {
       "file": "src/history/History.ts",
       "bucket": "kernel",
-      "lines": 54
+      "lines": 59
     },
     {
       "file": "src/host/createApp.ts",
       "bucket": "assembly",
-      "lines": 46
+      "lines": 61
     },
     {
       "file": "src/host/EditorSession.ts",

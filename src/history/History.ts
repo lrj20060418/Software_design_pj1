@@ -50,4 +50,9 @@ export class History {
     this.undoStack.push(command);
     return result;
   }
+
+  /** 供测试：当前可撤销命令数（不暴露栈内容） */
+  undoDepth(): number {
+    return this.undoStack.length;
+  }
 }

@@ -1,21 +1,24 @@
 # Metrics (auto-generated)
 
-Generated: 2026-11-26T02:30:22.617Z
+Generated: 2026-11-26T02:33:32.101Z
 
 ## Lines of code by bucket
 
 | Bucket | Lines |
 |---|---|
-| kernel | 2262 |
-| assembly | 1199 |
-| plugins | 0 |
+| kernel | 2275 |
+| assembly | 1214 |
+| plugins | 95 |
 | other | 0 |
-| **sum** | **3461** |
+| **sum** | **3584** |
 
 ## File inventory
 
 | File | Bucket | Lines |
 |---|---|---|
+| `plugins/command-stats/src/collectStats.ts` | plugins | 57 |
+| `plugins/command-stats/src/index.ts` | plugins | 13 |
+| `plugins/command-stats/src/StatsCliCommand.ts` | plugins | 25 |
 | `src/builtin/commands/AddToCliCommand.ts` | assembly | 18 |
 | `src/builtin/commands/BackCliCommand.ts` | assembly | 18 |
 | `src/builtin/commands/CanvasCliCommand.ts` | assembly | 18 |
@@ -66,11 +69,11 @@ Generated: 2026-11-26T02:30:22.617Z
 | `src/extensions/ICliCommand.ts` | kernel | 15 |
 | `src/extensions/IShapeProvider.ts` | kernel | 17 |
 | `src/extensions/ITreeDecorator.ts` | kernel | 21 |
-| `src/extensions/PluginContext.ts` | kernel | 16 |
+| `src/extensions/PluginContext.ts` | kernel | 24 |
 | `src/extensions/ShapeRegistry.ts` | kernel | 36 |
 | `src/extensions/TreeDecoratorRegistry.ts` | kernel | 38 |
-| `src/history/History.ts` | kernel | 54 |
-| `src/host/createApp.ts` | assembly | 46 |
+| `src/history/History.ts` | kernel | 59 |
+| `src/host/createApp.ts` | assembly | 61 |
 | `src/host/EditorSession.ts` | assembly | 388 |
 | `src/io/SvgReader.ts` | kernel | 235 |
 | `src/io/SvgWriter.ts` | kernel | 32 |

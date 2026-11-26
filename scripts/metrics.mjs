@@ -7,19 +7,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const src = path.join(root, "src");
-
-/** @type {Record<string, string[]>} */
-const buckets = {
-  kernel: [
-    "extensions",
-    "model",
-    "history",
-    "commands",
-    "io",
-  ],
-  assembly: ["host", "cli", "builtin"],
-  plugins: ["plugins"],
-};
+const pluginsRoot = path.join(root, "plugins");
 
 function walk(dir, files = []) {
   if (!fs.existsSync(dir)) {
@@ -28,6 +16,7 @@ function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
+      if (entry.name === "node_modules" || entry.name === "dist") continue;
       walk(full, files);
     } else if (entry.name.endsWith(".ts")) {
       files.push(full);
@@ -54,17 +43,22 @@ fs.mkdirSync(outDir, { recursive: true });
 const inventory = [];
 const totals = { kernel: 0, assembly: 0, plugins: 0, other: 0 };
 
-for (const file of walk(src)) {
-  const r = rel(file);
-  const parts = r.split("/");
-  const top = parts[1]; // src/<top>/...
-  let bucket = "other";
-  for (const [name, tops] of Object.entries(buckets)) {
-    if (tops.includes(top)) {
-      bucket = name;
-      break;
-    }
+function classify(fileRel) {
+  if (fileRel.startsWith("plugins/")) return "plugins";
+  if (!fileRel.startsWith("src/")) return "other";
+  const top = fileRel.split("/")[1];
+  if (["extensions", "model", "history", "commands", "io"].includes(top)) {
+    return "kernel";
   }
+  if (["host", "cli", "builtin"].includes(top)) {
+    return "assembly";
+  }
+  return "other";
+}
+
+for (const file of [...walk(src), ...walk(pluginsRoot)]) {
+  const r = rel(file);
+  const bucket = classify(r);
   const lines = countLines(file);
   totals[bucket] += lines;
   inventory.push({ file: r, bucket, lines });

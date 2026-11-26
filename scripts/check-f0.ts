@@ -10,7 +10,7 @@ function check(name: string, ok: boolean, detail = ""): void {
   checks.push({ name, ok, detail });
 }
 
-const app = createApp();
+const app = createApp({ enableOptionalPlugins: false });
 const { ctx, dispatcher } = app;
 
 check("shape providers = 6", ctx.shapes.types().sort().join(",") === "circle,ellipse,g,line,rect,text");
@@ -33,7 +33,7 @@ function run(lines: string[]): string[] {
   return out;
 }
 
-const app2 = createApp();
+const app2 = createApp({ enableOptionalPlugins: false });
 const d = app2.dispatcher;
 const outputs = run([
   "init 800 600",
