@@ -1,12 +1,38 @@
 # SVG Editor（CLI）— PJ1 文档
 
-> 状态：**Phase 1 完成**（tag `final`）；**Phase 2 进行中**（VSCode V0–V2 + CLI Exp-F0 已完成）。  
+> 状态：**Phase 1 完成**（tag `final`）；**Phase 2 完成**（tag `p2`）。  
 > Phase 1 约束：[AI 护栏](./AI_GUARDRAILS.md) · [任务边界](./TASK_BOUNDARIES.md) · 规格 [`phase_cli_1.md`](../phase_cli_1.md)  
-> Phase 2：[任务边界](./TASK_BOUNDARIES_P2.md) · [扩展点清单](./EXTENSION_POINTS.md) · 规格 [`phase_cli_2.md`](../pj1-phase2/phase_cli_2.md) · VSCode A.3 [`../vscode-svg-extension/docs/A3_ANALYSIS.md`](../vscode-svg-extension/docs/A3_ANALYSIS.md) · [metrics](../docs/metrics/README.md)
+> Phase 2：[任务边界](./TASK_BOUNDARIES_P2.md) · [扩展点清单](./EXTENSION_POINTS.md) · [迭代报告](./ITERATION_P2.md) · 规格 [`phase_cli_2.md`](../pj1-phase2/phase_cli_2.md) · VSCode A.3 [`../vscode-svg-extension/docs/A3_ANALYSIS.md`](../vscode-svg-extension/docs/A3_ANALYSIS.md) · [metrics](../docs/metrics/README.md)
 
 ---
 
-## 架构方案
+## Phase 2 交付索引
+
+| 交付 | 位置 |
+|---|---|
+| 扩展点清单（接口 / 调用点 / 缺省 / 报错） | [EXTENSION_POINTS.md](./EXTENSION_POINTS.md) |
+| 两种装配与配置格式 | 同上「装配入口」；`plugins.config.json` |
+| 重构前后依赖图 | [ITERATION_P2.md](./ITERATION_P2.md) §2（PlantUML） |
+| ADR（≥3） | [adr/0001](./adr/0001-attribute-handler-contract.md) · [0002](./adr/0002-box-readback-and-invariants.md) · [0003](./adr/0003-tree-decorator-dirty-semantics.md) · [0004](./adr/0004-plugin-config-validation.md) |
+| `dir` 适配器 | [plugins/command-dir/README.md](../plugins/command-dir/README.md) |
+| 第一部分 A.3 | [vscode-svg-extension/docs/A3_ANALYSIS.md](../vscode-svg-extension/docs/A3_ANALYSIS.md) |
+| 指标（脚本生成） | [docs/metrics/](../docs/metrics/README.md) · `npm run metrics` |
+
+### Phase 2 运行
+
+```bash
+npm install
+npx tsx src/cli/main.ts                              # 方式 A（代码装配，默认装可选插件）
+npx tsx src/cli/main.ts --config plugins.config.json # 方式 B（配置装配）
+npm run check:a0   # 双装配一致 + 加载器失败/回滚
+npm run metrics    # 重算 LOC / 复杂度增量
+```
+
+VSCode 扩展：`vscode-svg-extension/`（`pnpm install && pnpm run compile`，F5 调试；截图见 A.3）。
+
+---
+
+## 架构方案（Phase 1）
 
 ### 1. 模块划分
 
@@ -185,4 +211,4 @@ npm run cli
 
 改代码后须 **重启** `npm run cli`（tsx 不热更新已运行进程）。
 
-远程仓库：`origin` → GitHub；验收以 tag `final` 为准。
+远程仓库：`origin` → GitHub；Phase 1 以 tag `final` 为准，Phase 2 以 tag `p2` 为准。

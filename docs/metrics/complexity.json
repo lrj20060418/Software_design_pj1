@@ -1,0 +1,653 @@
+{
+  "generatedAt": "2026-11-26T03:18:04.268Z",
+  "method": "heuristic McCabe-like: (#functions) + count(if|for|while|case|catch|?|&&|||); strings/comments stripped",
+  "baselineTag": "final",
+  "note": "delta = current working tree − tag final (missing files at final count as 0)",
+  "totals": {
+    "kernel": {
+      "current": 291,
+      "final": 267,
+      "delta": 24
+    },
+    "assembly": {
+      "current": 277,
+      "final": 96,
+      "delta": 181
+    },
+    "plugins": {
+      "current": 91,
+      "final": 0,
+      "delta": 91
+    },
+    "other": {
+      "current": 0,
+      "final": 0,
+      "delta": 0
+    }
+  },
+  "files": [
+    {
+      "file": "plugins/command-dir/src/DirCliCommand.ts",
+      "bucket": "plugins",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "plugins/command-dir/src/FakeDirectoryAccess.ts",
+      "bucket": "plugins",
+      "complexity": 4,
+      "finalComplexity": 0,
+      "delta": 4
+    },
+    {
+      "file": "plugins/command-dir/src/formatDirListing.ts",
+      "bucket": "plugins",
+      "complexity": 4,
+      "finalComplexity": 0,
+      "delta": 4
+    },
+    {
+      "file": "plugins/command-dir/src/IDirectoryAccess.ts",
+      "bucket": "plugins",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "plugins/command-dir/src/index.ts",
+      "bucket": "plugins",
+      "complexity": 7,
+      "finalComplexity": 0,
+      "delta": 7
+    },
+    {
+      "file": "plugins/command-dir/src/NodeFsDirectoryAccess.ts",
+      "bucket": "plugins",
+      "complexity": 6,
+      "finalComplexity": 0,
+      "delta": 6
+    },
+    {
+      "file": "plugins/command-stats/src/collectStats.ts",
+      "bucket": "plugins",
+      "complexity": 11,
+      "finalComplexity": 0,
+      "delta": 11
+    },
+    {
+      "file": "plugins/command-stats/src/index.ts",
+      "bucket": "plugins",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "plugins/command-stats/src/StatsCliCommand.ts",
+      "bucket": "plugins",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "plugins/shape-box/src/Box.ts",
+      "bucket": "plugins",
+      "complexity": 8,
+      "finalComplexity": 0,
+      "delta": 8
+    },
+    {
+      "file": "plugins/shape-box/src/BoxAttributeHandler.ts",
+      "bucket": "plugins",
+      "complexity": 8,
+      "finalComplexity": 0,
+      "delta": 8
+    },
+    {
+      "file": "plugins/shape-box/src/BoxShapeProvider.ts",
+      "bucket": "plugins",
+      "complexity": 7,
+      "finalComplexity": 0,
+      "delta": 7
+    },
+    {
+      "file": "plugins/shape-box/src/index.ts",
+      "bucket": "plugins",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "plugins/tree-box-label/src/BoxTypeLabelDecorator.ts",
+      "bucket": "plugins",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "plugins/tree-box-label/src/index.ts",
+      "bucket": "plugins",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "plugins/tree-star/src/index.ts",
+      "bucket": "plugins",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "plugins/tree-star/src/ModifiedStarDecorator.ts",
+      "bucket": "plugins",
+      "complexity": 11,
+      "finalComplexity": 0,
+      "delta": 11
+    },
+    {
+      "file": "plugins/tree-star/src/shapeFingerprint.ts",
+      "bucket": "plugins",
+      "complexity": 8,
+      "finalComplexity": 0,
+      "delta": 8
+    },
+    {
+      "file": "src/builtin/commands/AddToCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/BackCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/CanvasCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/CreateCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/DeleteCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/FrontCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/GroupCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/HelpCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/InitCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/MoveCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/ReadCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/RedoCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/SaveCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/ScaleCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/SessionCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/SetCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/ShowCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/TreeCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/UndoCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/commands/UngroupCliCommand.ts",
+      "bucket": "assembly",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/builtin/registerBuiltins.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/builtin/shapes/applyStyle.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/builtin/shapes/CircleShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/builtin/shapes/EllipseShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/builtin/shapes/GroupShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "src/builtin/shapes/LineShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 4,
+      "finalComplexity": 0,
+      "delta": 4
+    },
+    {
+      "file": "src/builtin/shapes/parseNumbers.ts",
+      "bucket": "assembly",
+      "complexity": 6,
+      "finalComplexity": 0,
+      "delta": 6
+    },
+    {
+      "file": "src/builtin/shapes/RectShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/builtin/shapes/TextShapeProvider.ts",
+      "bucket": "assembly",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "src/cli/CommandDispatcher.ts",
+      "bucket": "assembly",
+      "complexity": 3,
+      "finalComplexity": 80,
+      "delta": -77
+    },
+    {
+      "file": "src/cli/main.ts",
+      "bucket": "assembly",
+      "complexity": 11,
+      "finalComplexity": 1,
+      "delta": 10
+    },
+    {
+      "file": "src/cli/Repl.ts",
+      "bucket": "assembly",
+      "complexity": 10,
+      "finalComplexity": 7,
+      "delta": 3
+    },
+    {
+      "file": "src/cli/tokenize.ts",
+      "bucket": "assembly",
+      "complexity": 8,
+      "finalComplexity": 8,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/AddToCommand.ts",
+      "bucket": "kernel",
+      "complexity": 5,
+      "finalComplexity": 5,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/AttributeHandlerCommand.ts",
+      "bucket": "kernel",
+      "complexity": 5,
+      "finalComplexity": 0,
+      "delta": 5
+    },
+    {
+      "file": "src/commands/BackCommand.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 1,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/CreateCommand.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 2,
+      "delta": 1
+    },
+    {
+      "file": "src/commands/DeleteCommand.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 3,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/FrontCommand.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 3,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/GroupCommand.ts",
+      "bucket": "kernel",
+      "complexity": 10,
+      "finalComplexity": 10,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/ICommand.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 1,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/MoveCommand.ts",
+      "bucket": "kernel",
+      "complexity": 6,
+      "finalComplexity": 6,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/ScaleCommand.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 1,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/SetCommand.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 3,
+      "delta": 0
+    },
+    {
+      "file": "src/commands/UngroupCommand.ts",
+      "bucket": "kernel",
+      "complexity": 8,
+      "finalComplexity": 8,
+      "delta": 0
+    },
+    {
+      "file": "src/extensions/AttributeHandlerRegistry.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/extensions/CommandRegistry.ts",
+      "bucket": "kernel",
+      "complexity": 2,
+      "finalComplexity": 0,
+      "delta": 2
+    },
+    {
+      "file": "src/extensions/IAttributeHandler.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/extensions/ICliCommand.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/extensions/IShapeProvider.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/extensions/ITreeDecorator.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/extensions/PluginContext.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 0,
+      "delta": 1
+    },
+    {
+      "file": "src/extensions/ShapeRegistry.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 0,
+      "delta": 3
+    },
+    {
+      "file": "src/extensions/TreeDecoratorRegistry.ts",
+      "bucket": "kernel",
+      "complexity": 5,
+      "finalComplexity": 0,
+      "delta": 5
+    },
+    {
+      "file": "src/history/History.ts",
+      "bucket": "kernel",
+      "complexity": 5,
+      "finalComplexity": 5,
+      "delta": 0
+    },
+    {
+      "file": "src/host/activatePlugin.ts",
+      "bucket": "assembly",
+      "complexity": 19,
+      "finalComplexity": 0,
+      "delta": 19
+    },
+    {
+      "file": "src/host/createApp.ts",
+      "bucket": "assembly",
+      "complexity": 43,
+      "finalComplexity": 0,
+      "delta": 43
+    },
+    {
+      "file": "src/host/EditorSession.ts",
+      "bucket": "assembly",
+      "complexity": 72,
+      "finalComplexity": 0,
+      "delta": 72
+    },
+    {
+      "file": "src/host/PluginLoader.ts",
+      "bucket": "assembly",
+      "complexity": 51,
+      "finalComplexity": 0,
+      "delta": 51
+    },
+    {
+      "file": "src/host/pluginManifest.ts",
+      "bucket": "assembly",
+      "complexity": 11,
+      "finalComplexity": 0,
+      "delta": 11
+    },
+    {
+      "file": "src/io/SvgReader.ts",
+      "bucket": "kernel",
+      "complexity": 19,
+      "finalComplexity": 19,
+      "delta": 0
+    },
+    {
+      "file": "src/io/SvgWriter.ts",
+      "bucket": "kernel",
+      "complexity": 1,
+      "finalComplexity": 1,
+      "delta": 0
+    },
+    {
+      "file": "src/model/Circle.ts",
+      "bucket": "kernel",
+      "complexity": 22,
+      "finalComplexity": 21,
+      "delta": 1
+    },
+    {
+      "file": "src/model/Document.ts",
+      "bucket": "kernel",
+      "complexity": 64,
+      "finalComplexity": 50,
+      "delta": 14
+    },
+    {
+      "file": "src/model/Ellipse.ts",
+      "bucket": "kernel",
+      "complexity": 24,
+      "finalComplexity": 23,
+      "delta": 1
+    },
+    {
+      "file": "src/model/Group.ts",
+      "bucket": "kernel",
+      "complexity": 9,
+      "finalComplexity": 8,
+      "delta": 1
+    },
+    {
+      "file": "src/model/Line.ts",
+      "bucket": "kernel",
+      "complexity": 22,
+      "finalComplexity": 21,
+      "delta": 1
+    },
+    {
+      "file": "src/model/Rect.ts",
+      "bucket": "kernel",
+      "complexity": 24,
+      "finalComplexity": 23,
+      "delta": 1
+    },
+    {
+      "file": "src/model/Shape.ts",
+      "bucket": "kernel",
+      "complexity": 6,
+      "finalComplexity": 2,
+      "delta": 4
+    },
+    {
+      "file": "src/model/ShapeFactory.ts",
+      "bucket": "kernel",
+      "complexity": 3,
+      "finalComplexity": 31,
+      "delta": -28
+    },
+    {
+      "file": "src/model/Text.ts",
+      "bucket": "kernel",
+      "complexity": 21,
+      "finalComplexity": 20,
+      "delta": 1
+    }
+  ]
+}

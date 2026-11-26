@@ -1,7 +1,8 @@
 /**
- * 按「内核 / 装配处 / 插件」统计 TypeScript 行数（脚本生成，禁手填）。
+ * 按「内核 / 装配处 / 插件」统计 TypeScript 行数，并嵌入圈复杂度增量（脚本生成，禁手填）。
  * 用法：node scripts/metrics.mjs
  */
+import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -69,7 +70,7 @@ inventory.sort((a, b) => a.file.localeCompare(b.file));
 const generatedAt = new Date().toISOString();
 const summary = {
   generatedAt,
-  note: "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
+  note: "LOC by bucket (kernel / assembly / plugins). Complexity via scripts/complexity.mjs.",
   totals,
   files: inventory,
 };
@@ -79,10 +80,23 @@ fs.writeFileSync(
   JSON.stringify(summary, null, 2) + "\n",
 );
 
+execSync("node scripts/complexity.mjs", { stdio: "inherit", cwd: root });
+const complexity = JSON.parse(
+  fs.readFileSync(path.join(outDir, "complexity.json"), "utf8"),
+);
+
+const cxTotals = complexity.totals ?? {};
+const cxRows = ["kernel", "assembly", "plugins", "other"].map((k) => {
+  const t = cxTotals[k] ?? { current: 0, final: 0, delta: 0 };
+  return `| ${k} | ${t.final} | ${t.current} | ${t.delta >= 0 ? "+" : ""}${t.delta} |`;
+});
+
 const md = [
   "# Metrics (auto-generated)",
   "",
   `Generated: ${generatedAt}`,
+  "",
+  "> CLI 范围；VSCode 扩展不计入。数字由 `node scripts/metrics.mjs` / `complexity.mjs` 从源码与 git 生成。",
   "",
   "## Lines of code by bucket",
   "",
@@ -102,7 +116,17 @@ const md = [
   "",
   "## Cyclomatic complexity delta",
   "",
-  "_Pending: compare `final` → `p2` with dedicated complexity script at Exp-D0._",
+  complexity.baselineTag
+    ? `Baseline tag: \`${complexity.baselineTag}\` → current working tree.`
+    : "_tag `final` not found; final column is 0._",
+  "",
+  `Method: ${complexity.method}`,
+  "",
+  "| Bucket | final | current | Δ |",
+  "|---|---|---|---|",
+  ...cxRows,
+  "",
+  "Per-file detail: [`complexity.json`](./complexity.json).",
   "",
 ];
 

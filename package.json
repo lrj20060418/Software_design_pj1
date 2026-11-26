@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "node dist/src/cli/main.js",
     "metrics": "node scripts/metrics.mjs",
+    "complexity": "node scripts/complexity.mjs",
     "check:f0": "tsx scripts/check-f0.ts",
     "check:c0": "tsx scripts/check-c0.ts",
     "check:c1": "tsx scripts/check-c1.ts",

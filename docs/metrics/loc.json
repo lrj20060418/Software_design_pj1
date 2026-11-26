@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-26T02:56:52.316Z",
-  "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
+  "generatedAt": "2026-11-26T03:17:50.546Z",
+  "note": "LOC by bucket (kernel / assembly / plugins). Complexity via scripts/complexity.mjs.",
   "totals": {
-    "kernel": 2472,
-    "assembly": 1246,
-    "plugins": 704,
+    "kernel": 2526,
+    "assembly": 1729,
+    "plugins": 720,
     "other": 0
   },
   "files": [
@@ -46,7 +46,7 @@
     {
       "file": "plugins/command-stats/src/index.ts",
       "bucket": "plugins",
-      "lines": 13
+      "lines": 17
     },
     {
       "file": "plugins/command-stats/src/StatsCliCommand.ts",
@@ -71,7 +71,7 @@
     {
       "file": "plugins/shape-box/src/index.ts",
       "bucket": "plugins",
-      "lines": 18
+      "lines": 22
     },
     {
       "file": "plugins/tree-box-label/src/BoxTypeLabelDecorator.ts",
@@ -81,12 +81,12 @@
     {
       "file": "plugins/tree-box-label/src/index.ts",
       "bucket": "plugins",
-      "lines": 11
+      "lines": 15
     },
     {
       "file": "plugins/tree-star/src/index.ts",
       "bucket": "plugins",
-      "lines": 11
+      "lines": 15
     },
     {
       "file": "plugins/tree-star/src/ModifiedStarDecorator.ts",
@@ -251,12 +251,12 @@
     {
       "file": "src/cli/main.ts",
       "bucket": "assembly",
-      "lines": 5
+      "lines": 39
     },
     {
       "file": "src/cli/Repl.ts",
       "bucket": "assembly",
-      "lines": 53
+      "lines": 55
     },
     {
       "file": "src/cli/tokenize.ts",
@@ -326,12 +326,12 @@
     {
       "file": "src/extensions/AttributeHandlerRegistry.ts",
       "bucket": "kernel",
-      "lines": 29
+      "lines": 42
     },
     {
       "file": "src/extensions/CommandRegistry.ts",
       "bucket": "kernel",
-      "lines": 26
+      "lines": 30
     },
     {
       "file": "src/extensions/IAttributeHandler.ts",
@@ -361,12 +361,12 @@
     {
       "file": "src/extensions/ShapeRegistry.ts",
       "bucket": "kernel",
-      "lines": 36
+      "lines": 40
     },
     {
       "file": "src/extensions/TreeDecoratorRegistry.ts",
       "bucket": "kernel",
-      "lines": 38
+      "lines": 51
     },
     {
       "file": "src/history/History.ts",
@@ -374,14 +374,29 @@
       "lines": 59
     },
     {
+      "file": "src/host/activatePlugin.ts",
+      "bucket": "assembly",
+      "lines": 101
+    },
+    {
       "file": "src/host/createApp.ts",
       "bucket": "assembly",
-      "lines": 96
+      "lines": 175
     },
     {
       "file": "src/host/EditorSession.ts",
       "bucket": "assembly",
       "lines": 385
+    },
+    {
+      "file": "src/host/PluginLoader.ts",
+      "bucket": "assembly",
+      "lines": 206
+    },
+    {
+      "file": "src/host/pluginManifest.ts",
+      "bucket": "assembly",
+      "lines": 61
     },
     {
       "file": "src/io/SvgReader.ts",
@@ -401,7 +416,7 @@
     {
       "file": "src/model/Document.ts",
       "bucket": "kernel",
-      "lines": 413
+      "lines": 433
     },
     {
       "file": "src/model/Ellipse.ts",
