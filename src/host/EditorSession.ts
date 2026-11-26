@@ -16,7 +16,7 @@ import { SvgWriter } from "../io/SvgWriter.js";
 import type { AttributeHandlerRegistry } from "../extensions/AttributeHandlerRegistry.js";
 import type { CommandRegistry } from "../extensions/CommandRegistry.js";
 import type { TreeDecoratorRegistry } from "../extensions/TreeDecoratorRegistry.js";
-import type { ICommand } from "../commands/ICommand.js";
+import { AttributeHandlerCommand } from "../commands/AttributeHandlerCommand.js";
 
 /**
  * 内置命令的共享会话能力（文档 / 历史 / 工厂 / IO / 扩展注册表）。
@@ -156,15 +156,25 @@ export class EditorSession {
     const [id, attr, value] = args;
     this.document.requireShape(id);
 
-    const handlers = this.attributes.findHandlers(id, attr);
+    const handlers = this.attributes.findHandlers(id, attr, this.document);
     if (handlers.length > 1) {
+      // ADR-0001：多处理器同时命中 → 拒绝，不执行、不入栈
       return `error: conflicting attribute handlers for ${attr} on ${id}`;
     }
     if (handlers.length === 1) {
       try {
-        return this.executeAttributeHandler(id, attr, value, handlers[0]);
+        const ctx = {
+          document: this.document,
+          shapeId: id,
+          attr,
+          value,
+        };
+        const command = new AttributeHandlerCommand(handlers[0], ctx);
+        return this.history.execute(command);
       } catch (err) {
-        return err instanceof Error ? err.message : String(err);
+        // apply 失败已在 Command 内回滚；此处保证不回落默认 SetCommand
+        const message = err instanceof Error ? err.message : String(err);
+        return message.startsWith("error:") ? message : `error: ${message}`;
       }
     }
 
@@ -175,34 +185,6 @@ export class EditorSession {
     } catch (err) {
       return err instanceof Error ? err.message : String(err);
     }
-  }
-
-  private executeAttributeHandler(
-    id: string,
-    attr: string,
-    value: string,
-    handler: { apply(shapeId: string, attr: string, value: string): void },
-  ): string {
-    // 最小可用：执行 apply；undo 通过「再 apply 旧值」不可靠，Exp-B0 再做事务。
-    // F0 无内置 AttributeHandler，此分支不会在回归中走到。
-    const shape = this.document.requireShape(id);
-    const previous = shape.getAttribute(attr);
-    const command: ICommand = {
-      execute: () => {
-        handler.apply(id, attr, value);
-        return `${shape.getType()}#${id} updated: ${formatAttrValue(attr, value)}`;
-      },
-      undo: () => {
-        if (previous === undefined) {
-          // 尽力恢复；具体契约 Exp-B0
-          handler.apply(id, attr, "");
-        } else {
-          handler.apply(id, attr, previous);
-        }
-        return `${shape.getType()}#${id} updated: ${formatAttrValue(attr, previous)}`;
-      },
-    };
-    return this.history.execute(command);
   }
 
   delete(args: string[]): string {
@@ -374,14 +356,4 @@ function peelInClause(args: string[]): {
     };
   }
   return { params: args, containerId: undefined };
-}
-
-function formatAttrValue(attr: string, value: string | undefined): string {
-  if (value === undefined) {
-    return `${attr}=(none)`;
-  }
-  if (attr === "text") {
-    return `text="${value}"`;
-  }
-  return `${attr}=${value}`;
 }

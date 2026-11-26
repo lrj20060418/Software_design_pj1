@@ -19,7 +19,7 @@
 | Exp-F0 | CLI：四个扩展点就位 + Phase 1 回归 | `[x]` | §1；§7 过程「框架可扩展」 |
 | Exp-C0 | 命令插件：`stats` | `[x]` | §2.1 |
 | Exp-C1 | 命令插件：`dir` + 文件系统适配器 | `[x]` | §2.2–2.3 |
-| Exp-B0 | 属性扩展点契约 + ADR | `[ ]` | §3 |
+| Exp-B0 | 属性扩展点契约 + ADR | `[x]` | §3 |
 | Exp-B1 | 图形插件 `box`（含 AttributeHandler） | `[ ]` | §4；§3 |
 | Exp-T0 | 树标签：`modified-star` + `(box)` | `[ ]` | §5 |
 | Exp-A0 | 双装配：代码装配 + 配置装配 + 加载器 | `[ ]` | §6 |
@@ -263,11 +263,14 @@ export interface AttributeHandler {
 
 **验收**
 
-- [ ] 无处理器：原有允许属性仍可改；未知属性 → `error: unknown attribute: <attr>`
-- [ ] 多处理器命中行为符合 ADR，无未定义覆盖
-- [ ] 模拟「部分修改后抛错」：内容与 undo/redo 历史不变
+- [x] 无处理器：原有允许属性仍可改；未知属性 → `error: unknown attribute: <attr>`（`npm run check:b0`）
+- [x] 多处理器命中行为符合 ADR（拒绝，不覆盖）
+- [x] 模拟「部分修改后抛错」：内容与 undo/redo 历史不变
+- [x] 多子部件一次 set = 一个 undo/redo 单元（替身）
 
-**建议 commit**：`p2: attribute handler contract + ADR`
+**文档**：`doc/adr/0001-attribute-handler-contract.md`
+
+**建议 commit**：`feat(exp-b0): attribute handler contract and ADR`
 
 ---
 
@@ -462,7 +465,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-B0`（下一个未完成项）
+**当前激活**：`Exp-B1`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

@@ -1,3 +1,4 @@
+import type { Document } from "../model/Document.js";
 import type { IAttributeHandler } from "./IAttributeHandler.js";
 
 export class AttributeHandlerRegistry {
@@ -17,7 +18,11 @@ export class AttributeHandlerRegistry {
   }
 
   /** 返回所有声明负责该 (shapeId, attr) 的处理器 */
-  findHandlers(shapeId: string, attr: string): IAttributeHandler[] {
-    return this.handlers.filter((h) => h.handles(shapeId, attr));
+  findHandlers(
+    shapeId: string,
+    attr: string,
+    document: Document,
+  ): IAttributeHandler[] {
+    return this.handlers.filter((h) => h.handles(shapeId, attr, document));
   }
 }

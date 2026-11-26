@@ -11,7 +11,9 @@
 
 见 [`plugins/command-dir/README.md`](../plugins/command-dir/README.md)：`IDirectoryAccess`（Target）← `NodeFsDirectoryAccess`（Adapter）→ `fs`（Adaptee）；`DirCliCommand` 为 Client。
 | `ITreeDecorator` | 结构树行尾行标签 | `EditorSession.tree` → `TreeDecoratorRegistry.createLineHook` → `Document.renderTree` | （无；后续 `modified-star` / `(box)`） | `tree` 与 Phase 1 **逐字节一致**（不传 decorate 钩子） | 重复：`error: duplicate registration: decorators/<name>` |
-| `IAttributeHandler` | 属性领域语义 | `EditorSession.set` → `AttributeHandlerRegistry.findHandlers` | （无；后续 box `fill`/`label`） | 走 Phase 1 `SetCommand` 白名单 | 多处理器冲突：`error: conflicting attribute handlers…`；重复：`error: duplicate registration: attributes/<name>`；未知属性仍为 `error: unknown attribute: <attr>` |
+| `IAttributeHandler` | 属性领域语义 | `EditorSession.set` → `findHandlers` → `AttributeHandlerCommand` | 契约已定（ADR-0001）；业务实现见 Exp-B1 `box` | 走 Phase 1 `SetCommand` 白名单 | 多命中拒绝；`apply` 失败回滚且不入栈；重复注册报错；未知属性仍为 `error: unknown attribute` |
+
+契约详情：[`doc/adr/0001-attribute-handler-contract.md`](./adr/0001-attribute-handler-contract.md)
 
 ## 装配入口
 
