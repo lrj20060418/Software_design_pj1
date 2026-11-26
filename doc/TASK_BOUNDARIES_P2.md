@@ -15,7 +15,7 @@
 |---|---|---|---|
 | Exp-V0 | VSCode 扩展：SVG 文件标记 `[]` | `[x]` | A.1 |
 | Exp-V1 | VSCode 扩展：SVG 大纲 + 定位/更新 | `[x]` | A.2 |
-| Exp-V2 | VSCode 分析文档 + 截图/示例提交 | `[ ]` | A.3 |
+| Exp-V2 | VSCode 分析文档 + 截图/示例提交 | `[x]` | A.3 |
 | Exp-F0 | CLI：四个扩展点就位 + Phase 1 回归 | `[ ]` | §1；§7 过程「框架可扩展」 |
 | Exp-C0 | 命令插件：`stats` | `[ ]` | §2.1 |
 | Exp-C1 | 命令插件：`dir` + 文件系统适配器 | `[ ]` | §2.2–2.3 |
@@ -116,11 +116,13 @@
 
 **验收**
 
-- [ ] 扩展源码可运行
-- [ ] 文档含 A.3 三节要求
-- [ ] 截图与示例 SVG 齐全
+- [x] 扩展源码可运行（`pnpm run check:v2`）
+- [x] 文档含 A.3 三节要求（`docs/A3_ANALYSIS.md`）
+- [x] 截图与示例 SVG 齐全（`docs/images/` + `fixtures/`）
 
-**建议 commit**：`p2: vscode docs and demos`
+**代码位置**：`vscode-svg-extension/docs/A3_ANALYSIS.md`
+
+**建议 commit**：`feat(exp-v2): vscode A3 analysis and demos`
 
 ---
 
@@ -455,7 +457,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-V2`（下一个未完成项）
+**当前激活**：`Exp-F0`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

@@ -30,7 +30,8 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "check:v0": "node scripts/check-v0.mjs",
-    "check:v1": "node scripts/check-v1.mjs"
+    "check:v1": "node scripts/check-v1.mjs",
+    "check:v2": "node scripts/check-v2.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

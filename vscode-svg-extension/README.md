@@ -41,3 +41,10 @@ pnpm run check:v1
 ## 示例文件
 
 见 [`fixtures/`](./fixtures/)：`example.svg`、`broken.svg`、`plain.txt`、`session.txt`。
+
+## A.3 分析与演示（Exp-V2）
+
+完整说明（职责、Decorator/Adaptor、Phase 1 复用评估、截图）见：
+
+- [`docs/A3_ANALYSIS.md`](./docs/A3_ANALYSIS.md)
+- 截图：[`docs/images/svg-badge.jpg`](./docs/images/svg-badge.jpg)、[`docs/images/svg-outline.jpg`](./docs/images/svg-outline.jpg)
