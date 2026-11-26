@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile-svg-extension",
+      "type": "npm",
+      "script": "compile",
+      "path": "vscode-svg-extension/",
+      "group": "build",
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

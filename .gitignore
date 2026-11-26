@@ -3,6 +3,7 @@ dist/
 *.svg
 !fixtures/**/*.svg
 !other.svg
+!vscode-svg-extension/fixtures/**/*.svg
 .DS_Store
 *.log
 .env

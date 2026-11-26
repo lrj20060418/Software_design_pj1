@@ -1,0 +1,28 @@
+{
+  "name": "svg-explorer-badge",
+  "displayName": "SVG Explorer Badge",
+  "description": "Show [] badge next to .svg files in the Explorer (PJ1 Phase 2 Exp-V0)",
+  "version": "0.1.0",
+  "publisher": "pj1-phase2",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {},
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  }
+}
