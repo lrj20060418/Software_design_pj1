@@ -66,6 +66,7 @@ for (const f of [
   "ICliCommand.ts",
   "ITreeDecorator.ts",
   "IAttributeHandler.ts",
+  "IDocumentExporter.ts",
   "PluginContext.ts",
 ]) {
   check(`ext file ${f}`, fs.existsSync(path.join(extDir, f)));

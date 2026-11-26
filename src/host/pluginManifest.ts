@@ -1,9 +1,10 @@
-/** package.json contributes 四类扩展名列表 */
+/** package.json contributes 扩展名列表（含可选 exporters） */
 export interface PluginContributes {
   shapes: string[];
   commands: string[];
   decorators: string[];
   attributes: string[];
+  exporters: string[];
 }
 
 export interface RegisteredExtensions {
@@ -11,10 +12,17 @@ export interface RegisteredExtensions {
   commands: string[];
   decorators: string[];
   attributes: string[];
+  exporters: string[];
 }
 
 export function emptyContributes(): PluginContributes {
-  return { shapes: [], commands: [], decorators: [], attributes: [] };
+  return {
+    shapes: [],
+    commands: [],
+    decorators: [],
+    attributes: [],
+    exporters: [],
+  };
 }
 
 export function contributesFromPackageJson(pkg: unknown): PluginContributes {
@@ -33,6 +41,7 @@ export function normalizeContributes(raw: unknown): PluginContributes {
     commands: list("commands"),
     decorators: list("decorators"),
     attributes: list("attributes"),
+    exporters: list("exporters"),
   };
 }
 
@@ -55,6 +64,6 @@ export function formatManifestMismatch(
   registered: RegisteredExtensions,
 ): string {
   const fmt = (c: PluginContributes | RegisteredExtensions): string =>
-    `shapes=[${sortedCopy(c.shapes).join(",")}] commands=[${sortedCopy(c.commands).join(",")}] decorators=[${sortedCopy(c.decorators).join(",")}] attributes=[${sortedCopy(c.attributes).join(",")}]`;
+    `shapes=[${sortedCopy(c.shapes).join(",")}] commands=[${sortedCopy(c.commands).join(",")}] decorators=[${sortedCopy(c.decorators).join(",")}] attributes=[${sortedCopy(c.attributes).join(",")}] exporters=[${sortedCopy(c.exporters).join(",")}]`;
   return `error: plugin manifest mismatch: ${pluginName} (declared: ${fmt(declared)}, registered: ${fmt(registered)})`;
 }

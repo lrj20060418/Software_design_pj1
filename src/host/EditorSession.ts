@@ -15,6 +15,7 @@ import { SvgReader } from "../io/SvgReader.js";
 import { SvgWriter } from "../io/SvgWriter.js";
 import type { AttributeHandlerRegistry } from "../extensions/AttributeHandlerRegistry.js";
 import type { CommandRegistry } from "../extensions/CommandRegistry.js";
+import type { ExporterRegistry } from "../extensions/ExporterRegistry.js";
 import type { TreeDecoratorRegistry } from "../extensions/TreeDecoratorRegistry.js";
 import { AttributeHandlerCommand } from "../commands/AttributeHandlerCommand.js";
 
@@ -33,6 +34,7 @@ export class EditorSession {
     readonly commands: CommandRegistry,
     readonly treeDecorators: TreeDecoratorRegistry,
     readonly attributes: AttributeHandlerRegistry,
+    readonly exporters: ExporterRegistry,
   ) {
     this.reader = new SvgReader(shapeFactory);
   }
@@ -93,6 +95,20 @@ export class EditorSession {
       this.history.clearAfterIo();
       this.notifyTreeDecoratorsSave();
       return `saved to ${filePath} (${count} elements)`;
+    } catch (err) {
+      return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  /** 插件导出格式：`export <format> <path>`；不改写 SVG save 语义 */
+  exportDocument(args: string[]): string {
+    this.document.ensureReady();
+    if (args.length !== 2) {
+      return "error: usage: export <format> <path>";
+    }
+    const [format, filePath] = args;
+    try {
+      return this.exporters.require(format).export(this.document, filePath);
     } catch (err) {
       return err instanceof Error ? err.message : String(err);
     }

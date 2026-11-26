@@ -2,6 +2,7 @@ import type { Document } from "../model/Document.js";
 import type { History } from "../history/History.js";
 import { AttributeHandlerRegistry } from "./AttributeHandlerRegistry.js";
 import { CommandRegistry } from "./CommandRegistry.js";
+import { ExporterRegistry } from "./ExporterRegistry.js";
 import { ShapeRegistry } from "./ShapeRegistry.js";
 import { TreeDecoratorRegistry } from "./TreeDecoratorRegistry.js";
 
@@ -15,6 +16,7 @@ export class PluginContext {
   readonly commands = new CommandRegistry();
   readonly treeDecorators = new TreeDecoratorRegistry();
   readonly attributes = new AttributeHandlerRegistry();
+  readonly exporters = new ExporterRegistry();
 
   constructor(
     readonly document: Document,

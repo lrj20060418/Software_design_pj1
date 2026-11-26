@@ -8,6 +8,7 @@
 | `ICliCommand` | 一条 REPL 命令（含 `helpLines`） | `CommandDispatcher.dispatch`（`src/cli/CommandDispatcher.ts`） | Phase 1 内置（`src/builtin/commands/*`）；可选 `stats`、`dir` | 仅内置；未装可选命令 → `error: unknown command: <name>` | 重复：`error: duplicate registration: commands/<name>` |
 | `ITreeDecorator` | 结构树行尾行标签；可选 `onAfterSave` / `onAfterReset` | `EditorSession.tree`；save / init / read 后通知装饰器 | `modified-star`（`plugins/tree-star`）、`box-type-label`（`plugins/tree-box-label`） | 无装饰器时 `createLineHook` 返回 `undefined`，`tree` 与 Phase 1 **逐字节**一致 | 重复：`error: duplicate registration: decorators/<name>`；语义见 ADR-0003 |
 | `IAttributeHandler` | 属性在特定图形上的领域语义 | `EditorSession.set` → `AttributeHandlerRegistry.findHandlers` → `AttributeHandlerCommand` | `box` 的 `fill` / `label`（`plugins/shape-box`） | 无命中走 Phase 1 `SetCommand` 白名单 | 多命中拒绝；`apply` 失败回滚且不入栈；重复：`error: duplicate registration: attributes/<name>`；未知属性仍为 `error: unknown attribute` |
+| `IDocumentExporter` | 一种非 SVG 导出格式 | `EditorSession.exportDocument` ← 内置 `export` 命令 | `json`（`plugins/export-json`） | 无导出器时 `export json …` → `error: unknown export format: json` | 重复：`error: duplicate registration: exporters/<name>` |
 
 契约详情：
 

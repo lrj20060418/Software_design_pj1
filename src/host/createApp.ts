@@ -21,6 +21,7 @@ import {
 } from "../../plugins/command-dir/src/index.js";
 import { activate as activateBox } from "../../plugins/shape-box/src/index.js";
 import { activate as activateDiamond } from "../../plugins/shape-diamond/src/index.js";
+import { activate as activateExportJson } from "../../plugins/export-json/src/index.js";
 import { activate as activateTreeStar } from "../../plugins/tree-star/src/index.js";
 import { activate as activateTreeBoxLabel } from "../../plugins/tree-box-label/src/index.js";
 
@@ -47,6 +48,7 @@ export interface CreateAppOptions {
     dir?: boolean;
     box?: boolean;
     diamond?: boolean;
+    exportJson?: boolean;
     treeStar?: boolean;
     treeBoxLabel?: boolean;
   };
@@ -122,6 +124,7 @@ export function createApp(options: CreateAppOptions = {}): App {
     ctx.commands,
     ctx.treeDecorators,
     ctx.attributes,
+    ctx.exporters,
   );
 
   registerBuiltinCommands(ctx, session);
@@ -172,6 +175,9 @@ function registerOptionalPluginsCode(
       log,
       options.diamond as Record<string, unknown> | undefined,
     );
+  }
+  if (pluginEnabled(options, "exportJson")) {
+    activateCodePlugin(ctx, "plugins/export-json", activateExportJson, log);
   }
   if (pluginEnabled(options, "treeBoxLabel")) {
     activateCodePlugin(

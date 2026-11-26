@@ -1,6 +1,7 @@
 import type { PluginContext } from "../extensions/PluginContext.js";
 import {
   formatManifestMismatch,
+  normalizeContributes,
   sameNameSet,
   type PluginContributes,
   type RegisteredExtensions,
@@ -43,13 +44,14 @@ export function activatePluginValidated(
 
   const after = snapshot(ctx);
   const registered = diff(before, after);
-  const declared = args.contributes;
+  const declared = normalizeContributes(args.contributes);
 
   if (
     !sameNameSet(declared.shapes, registered.shapes) ||
     !sameNameSet(declared.commands, registered.commands) ||
     !sameNameSet(declared.decorators, registered.decorators) ||
-    !sameNameSet(declared.attributes, registered.attributes)
+    !sameNameSet(declared.attributes, registered.attributes) ||
+    !sameNameSet(declared.exporters, registered.exporters)
   ) {
     rollback(ctx, before);
     return formatManifestMismatch(args.name, declared, registered);
@@ -64,6 +66,7 @@ export function snapshot(ctx: PluginContext): RegisteredExtensions {
     commands: ctx.commands.names(),
     decorators: ctx.treeDecorators.names(),
     attributes: ctx.attributes.names(),
+    exporters: ctx.exporters.names(),
   };
 }
 
@@ -78,6 +81,7 @@ function diff(
     commands: sub(before.commands, after.commands),
     decorators: sub(before.decorators, after.decorators),
     attributes: sub(before.attributes, after.attributes),
+    exporters: sub(before.exporters, after.exporters),
   };
 }
 
@@ -95,6 +99,9 @@ function rollback(ctx: PluginContext, before: RegisteredExtensions): void {
   }
   for (const name of added.attributes) {
     ctx.attributes.unregister(name);
+  }
+  for (const name of added.exporters) {
+    ctx.exporters.unregister(name);
   }
 }
 

@@ -20,6 +20,7 @@ import { ScaleCliCommand } from "./commands/ScaleCliCommand.js";
 import { CanvasCliCommand } from "./commands/CanvasCliCommand.js";
 import { SaveCliCommand } from "./commands/SaveCliCommand.js";
 import { ReadCliCommand } from "./commands/ReadCliCommand.js";
+import { ExportCliCommand } from "./commands/ExportCliCommand.js";
 import { UndoCliCommand } from "./commands/UndoCliCommand.js";
 import { RedoCliCommand } from "./commands/RedoCliCommand.js";
 import { TreeCliCommand } from "./commands/TreeCliCommand.js";
@@ -56,6 +57,7 @@ export function registerBuiltinCommands(
     new CanvasCliCommand(session),
     new SaveCliCommand(session),
     new ReadCliCommand(session),
+    new ExportCliCommand(session),
     new UndoCliCommand(session),
     new RedoCliCommand(session),
     new TreeCliCommand(session),
