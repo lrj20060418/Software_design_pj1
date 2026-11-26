@@ -1,4 +1,4 @@
-import { Shape } from "./Shape.js";
+import { Shape, type TreeLineDecorator } from "./Shape.js";
 
 /**
  * 容器节点 `<g>`：Composite 的「组合」角色。
@@ -68,13 +68,21 @@ export class Group extends Shape {
     throw new Error(`error: unknown attribute: ${attr}`);
   }
 
-  toTreeLine(indent: string, isLast: boolean): string[] {
+  toTreeLine(
+    indent: string,
+    isLast: boolean,
+    decorate?: TreeLineDecorator,
+  ): string[] {
     const branch = isLast ? "└── " : "├── ";
-    const lines = [`${indent}${branch}g#${this.id}`];
+    const title = this.applyTreeDecorate(
+      `${indent}${branch}g#${this.id}`,
+      decorate,
+    );
+    const lines = [title];
     const childIndent = indent + (isLast ? "    " : "│   ");
     this.children.forEach((child, index) => {
       const last = index === this.children.length - 1;
-      lines.push(...child.toTreeLine(childIndent, last));
+      lines.push(...child.toTreeLine(childIndent, last, decorate));
     });
     return lines;
   }

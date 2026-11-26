@@ -4,8 +4,6 @@ import { Group } from "../model/Group.js";
 import { ShapeFactory } from "../model/ShapeFactory.js";
 import type { Shape } from "../model/Shape.js";
 
-const SUPPORTED = new Set(["rect", "circle", "ellipse", "line", "text", "g"]);
-
 interface XmlNode {
   tag: string;
   attrs: Record<string, string>;
@@ -15,9 +13,11 @@ interface XmlNode {
 
 /**
  * 将 .svg 文件解析为 Document（缺 id 时自动补全并收集 warning）。
- * 依赖 model，不依赖 cli / commands。
+ * 依赖 model + ShapeFactory（扩展点），不依赖 cli / commands。
  */
 export class SvgReader {
+  constructor(private readonly shapeFactory: ShapeFactory) {}
+
   read(filePath: string, document: Document): string[] {
     let raw: string;
     try {
@@ -54,7 +54,7 @@ export class SvgReader {
     warnings: string[],
   ): Shape | null {
     const tag = node.tag.toLowerCase();
-    if (!SUPPORTED.has(tag)) {
+    if (!this.shapeFactory.supports(tag)) {
       return null;
     }
 
@@ -70,7 +70,7 @@ export class SvgReader {
     usedIds.add(id);
 
     if (tag === "g") {
-      const group = ShapeFactory.fromSvg("g", id, node.attrs) as Group;
+      const group = this.shapeFactory.fromSvg("g", id, node.attrs) as Group;
       for (const child of node.children) {
         const nested = this.buildShape(child, idCounters, usedIds, warnings);
         if (nested) {
@@ -81,7 +81,7 @@ export class SvgReader {
     }
 
     const textContent = tag === "text" ? unescapeXml(node.text.trim()) : "";
-    return ShapeFactory.fromSvg(tag, id, node.attrs, textContent);
+    return this.shapeFactory.fromSvg(tag, id, node.attrs, textContent);
   }
 }
 

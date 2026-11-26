@@ -1,3 +1,9 @@
+/** 结构树行装饰钩子；画布根行为 `shape === null` */
+export type TreeLineDecorator = (
+  shape: Shape | null,
+  line: string,
+) => string;
+
 /**
  * 图形基类（Composite 叶子/容器的共同接口）。
  * move / scale / set 等对 Group 与叶子一视同仁。
@@ -7,6 +13,14 @@ export abstract class Shape {
 
   getId(): string {
     return this.id;
+  }
+
+  /** 无装饰器时原样返回，保证 Phase 1 tree 逐字节不变 */
+  protected applyTreeDecorate(
+    line: string,
+    decorate?: TreeLineDecorator,
+  ): string {
+    return decorate ? decorate(this, line) : line;
   }
 
   protected xmlAttr(name: string, value: string | number | undefined): string {
@@ -37,7 +51,16 @@ export abstract class Shape {
     return false;
   }
 
-  abstract toTreeLine(indent: string, isLast: boolean): string[];
+  /**
+   * 渲染结构树中本节点（及子节点）的行。
+   * `decorate` 缺省时行为与 Phase 1 完全一致；有装饰器时仅改写每行文本。
+   */
+  abstract toTreeLine(
+    indent: string,
+    isLast: boolean,
+    decorate?: TreeLineDecorator,
+  ): string[];
+
 
   abstract toShowLines(parentRef: string): string[];
 

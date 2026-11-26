@@ -1,4 +1,4 @@
-import { Shape, escapeXml } from "./Shape.js";
+import { Shape, escapeXml, type TreeLineDecorator } from "./Shape.js";
 
 export class Text extends Shape {
   private x: number;
@@ -84,9 +84,14 @@ export class Text extends Shape {
     }
   }
 
-  toTreeLine(indent: string, isLast: boolean): string[] {
+  toTreeLine(
+    indent: string,
+    isLast: boolean,
+    decorate?: TreeLineDecorator,
+  ): string[] {
     const branch = isLast ? "└── " : "├── ";
-    return [`${indent}${branch}text#${this.id}  (${this.x},${this.y}) "${this.content}"`];
+    const line = `${indent}${branch}text#${this.id}  (${this.x},${this.y}) "${this.content}"`;
+    return [this.applyTreeDecorate(line, decorate)];
   }
 
   toShowLines(parentRef: string): string[] {

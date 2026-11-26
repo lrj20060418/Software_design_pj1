@@ -1,8 +1,8 @@
 # SVG Editor（CLI）— PJ1 文档
 
-> 状态：**Phase 1 完成**（tag `final`）；**Phase 2 进行中**（VSCode 部分 Exp-V0…V2 已完成）。  
+> 状态：**Phase 1 完成**（tag `final`）；**Phase 2 进行中**（VSCode V0–V2 + CLI Exp-F0 已完成）。  
 > Phase 1 约束：[AI 护栏](./AI_GUARDRAILS.md) · [任务边界](./TASK_BOUNDARIES.md) · 规格 [`phase_cli_1.md`](../phase_cli_1.md)  
-> Phase 2：[任务边界](./TASK_BOUNDARIES_P2.md) · 规格 [`phase_cli_2.md`](../pj1-phase2/phase_cli_2.md) · VSCode A.3 分析 [`../vscode-svg-extension/docs/A3_ANALYSIS.md`](../vscode-svg-extension/docs/A3_ANALYSIS.md)
+> Phase 2：[任务边界](./TASK_BOUNDARIES_P2.md) · [扩展点清单](./EXTENSION_POINTS.md) · 规格 [`phase_cli_2.md`](../pj1-phase2/phase_cli_2.md) · VSCode A.3 [`../vscode-svg-extension/docs/A3_ANALYSIS.md`](../vscode-svg-extension/docs/A3_ANALYSIS.md) · [metrics](../docs/metrics/README.md)
 
 ---
 

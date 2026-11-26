@@ -1,4 +1,4 @@
-import { Shape } from "./Shape.js";
+import { Shape, type TreeLineDecorator } from "./Shape.js";
 import { Group } from "./Group.js";
 
 /**
@@ -340,27 +340,34 @@ export class Document {
     return `g#${parentId}`;
   }
 
-  renderTree(rootId?: string): string {
+  renderTree(rootId?: string, decorate?: TreeLineDecorator): string {
     this.ensureReady();
 
     if (rootId !== undefined) {
       const shape = this.requireShape(rootId);
       if (shape instanceof Group) {
-        const lines = [`g#${shape.getId()}`];
+        const title = decorate
+          ? decorate(shape, `g#${shape.getId()}`)
+          : `g#${shape.getId()}`;
+        const lines = [title];
         const children = shape.getChildren();
         children.forEach((child, index) => {
           const last = index === children.length - 1;
-          lines.push(...child.toTreeLine("", last));
+          lines.push(...child.toTreeLine("", last, decorate));
         });
         return lines.join("\n");
       }
-      return shape.toTreeLine("", true).join("\n").replace(/^[└├]── /, "");
+      return shape
+        .toTreeLine("", true, decorate)
+        .join("\n")
+        .replace(/^[└├]── /, "");
     }
 
-    const lines = [`svg (${this.width}x${this.height})`];
+    const rootLine = `svg (${this.width}x${this.height})`;
+    const lines = [decorate ? decorate(null, rootLine) : rootLine];
     this.roots.forEach((child, index) => {
       const last = index === this.roots.length - 1;
-      lines.push(...child.toTreeLine("", last));
+      lines.push(...child.toTreeLine("", last, decorate));
     });
     return lines.join("\n");
   }

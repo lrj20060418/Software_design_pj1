@@ -1,0 +1,25 @@
+# Phase 1 smoke transcript (Exp-F0 regression)
+help
+init 800 600
+create rect bg 0 0 800 600 #ffffff
+create text title 20 40 "My Diagram"
+create circle c1 100 100 20 red
+create g node1
+create rect start 120 100 160 60 #4a90d9 in node1
+create ellipse e1 200 200 40 20 blue
+create line L1 0 0 10 10 black
+tree
+show c1
+move c1 5 5
+set c1 fill green
+undo
+redo
+scale c1 2
+front start
+back start
+group g2 c1 e1
+ungroup g2
+canvas
+canvas 640 480
+delete L1
+create box n1 1 2 3 4 "x"

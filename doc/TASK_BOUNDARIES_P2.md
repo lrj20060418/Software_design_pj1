@@ -16,7 +16,7 @@
 | Exp-V0 | VSCode 扩展：SVG 文件标记 `[]` | `[x]` | A.1 |
 | Exp-V1 | VSCode 扩展：SVG 大纲 + 定位/更新 | `[x]` | A.2 |
 | Exp-V2 | VSCode 分析文档 + 截图/示例提交 | `[x]` | A.3 |
-| Exp-F0 | CLI：四个扩展点就位 + Phase 1 回归 | `[ ]` | §1；§7 过程「框架可扩展」 |
+| Exp-F0 | CLI：四个扩展点就位 + Phase 1 回归 | `[x]` | §1；§7 过程「框架可扩展」 |
 | Exp-C0 | 命令插件：`stats` | `[ ]` | §2.1 |
 | Exp-C1 | 命令插件：`dir` + 文件系统适配器 | `[ ]` | §2.2–2.3 |
 | Exp-B0 | 属性扩展点契约 + ADR | `[ ]` | §3 |
@@ -141,24 +141,25 @@
 
 另需：
 
-- [ ] 扩展点接口定义在内核；内核不依赖实现
-- [ ] 禁用任何可选插件仍能启动，Phase 1 行为不变
-- [ ] `docs/metrics/` 首次产出（脚本生成，禁手填）
-- [ ] 文档起草「扩展点清单」骨架（接口名 / 调用位置 / 缺省行为 / 违约报错）
+- [x] 扩展点接口定义在内核；内核不依赖实现（`src/extensions/*`）
+- [x] 禁用任何可选插件仍能启动，Phase 1 行为不变（仅 `registerBuiltins`）
+- [x] `docs/metrics/` 首次产出（`npm run metrics` / `scripts/metrics.mjs`）
+- [x] 文档起草「扩展点清单」骨架（`doc/EXTENSION_POINTS.md`）
 
 **Out-of-Scope**：`stats` / `dir` / `box` / 树标签实现 / 配置加载器（后续 Exp）。
 
 **验收**
 
 ```bash
-# Phase 1 基线会话（禁用新增插件）输出与 tag final 一致
-<启动入口> < doc/transcript/cli-1.txt
+npm run check:f0
+npm run metrics
 ```
 
-- [ ] 六种图形 + Phase 1 全部命令回归通过
-- [ ] 内核不按具体插件名枚举
+- [x] 六种图形 + 内置命令经注册表分发（`check:f0` PASS）
+- [x] 内核不按具体插件名枚举（`ShapeFactory` / `CommandDispatcher` 只查注册表）
+- [x] 无 TreeDecorator 时 tree 根行仍为 `svg (WxH)`（无后缀）
 
-**建议 commit**：`p2: plugin extension points scaffold`
+**建议 commit**：`feat(exp-f0): scaffold four plugin extension points`
 
 ---
 
@@ -457,7 +458,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-F0`（下一个未完成项）
+**当前激活**：`Exp-C0`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

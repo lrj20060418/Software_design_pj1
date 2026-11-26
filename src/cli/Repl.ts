@@ -1,19 +1,17 @@
 import * as readline from "node:readline";
-import { Document } from "../model/Document.js";
-import { History } from "../history/History.js";
-import { CommandDispatcher } from "./CommandDispatcher.js";
+import { createApp } from "../host/createApp.js";
+import type { CommandDispatcher } from "./CommandDispatcher.js";
 
 /**
  * CLI 入口：维护提示符、读行、注释跳过，把一行交给 CommandDispatcher。
  * 本模块只做 IO，不直接改图形树。
  */
 export class Repl {
-  private readonly document = new Document();
-  private readonly history = new History();
   private readonly dispatcher: CommandDispatcher;
 
   constructor() {
-    this.dispatcher = new CommandDispatcher(this.document, this.history);
+    const app = createApp();
+    this.dispatcher = app.dispatcher;
   }
 
   start(): void {

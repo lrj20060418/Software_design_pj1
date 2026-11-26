@@ -1,0 +1,347 @@
+{
+  "generatedAt": "2026-11-26T02:30:22.617Z",
+  "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
+  "totals": {
+    "kernel": 2262,
+    "assembly": 1199,
+    "plugins": 0,
+    "other": 0
+  },
+  "files": [
+    {
+      "file": "src/builtin/commands/AddToCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/BackCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/CanvasCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/CreateCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/DeleteCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/FrontCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/GroupCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/HelpCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/InitCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/MoveCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/ReadCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/RedoCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/SaveCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/ScaleCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/SessionCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 20
+    },
+    {
+      "file": "src/builtin/commands/SetCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/ShowCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/TreeCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/UndoCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/commands/UngroupCliCommand.ts",
+      "bucket": "assembly",
+      "lines": 18
+    },
+    {
+      "file": "src/builtin/registerBuiltins.ts",
+      "bucket": "assembly",
+      "lines": 69
+    },
+    {
+      "file": "src/builtin/shapes/applyStyle.ts",
+      "bucket": "assembly",
+      "lines": 11
+    },
+    {
+      "file": "src/builtin/shapes/CircleShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 32
+    },
+    {
+      "file": "src/builtin/shapes/EllipseShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 33
+    },
+    {
+      "file": "src/builtin/shapes/GroupShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 19
+    },
+    {
+      "file": "src/builtin/shapes/LineShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 34
+    },
+    {
+      "file": "src/builtin/shapes/parseNumbers.ts",
+      "bucket": "assembly",
+      "lines": 21
+    },
+    {
+      "file": "src/builtin/shapes/RectShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 33
+    },
+    {
+      "file": "src/builtin/shapes/TextShapeProvider.ts",
+      "bucket": "assembly",
+      "lines": 28
+    },
+    {
+      "file": "src/cli/CommandDispatcher.ts",
+      "bucket": "assembly",
+      "lines": 25
+    },
+    {
+      "file": "src/cli/main.ts",
+      "bucket": "assembly",
+      "lines": 5
+    },
+    {
+      "file": "src/cli/Repl.ts",
+      "bucket": "assembly",
+      "lines": 53
+    },
+    {
+      "file": "src/cli/tokenize.ts",
+      "bucket": "assembly",
+      "lines": 40
+    },
+    {
+      "file": "src/commands/AddToCommand.ts",
+      "bucket": "kernel",
+      "lines": 53
+    },
+    {
+      "file": "src/commands/BackCommand.ts",
+      "bucket": "kernel",
+      "lines": 32
+    },
+    {
+      "file": "src/commands/CreateCommand.ts",
+      "bucket": "kernel",
+      "lines": 32
+    },
+    {
+      "file": "src/commands/DeleteCommand.ts",
+      "bucket": "kernel",
+      "lines": 37
+    },
+    {
+      "file": "src/commands/FrontCommand.ts",
+      "bucket": "kernel",
+      "lines": 43
+    },
+    {
+      "file": "src/commands/GroupCommand.ts",
+      "bucket": "kernel",
+      "lines": 72
+    },
+    {
+      "file": "src/commands/ICommand.ts",
+      "bucket": "kernel",
+      "lines": 9
+    },
+    {
+      "file": "src/commands/MoveCommand.ts",
+      "bucket": "kernel",
+      "lines": 38
+    },
+    {
+      "file": "src/commands/ScaleCommand.ts",
+      "bucket": "kernel",
+      "lines": 27
+    },
+    {
+      "file": "src/commands/SetCommand.ts",
+      "bucket": "kernel",
+      "lines": 44
+    },
+    {
+      "file": "src/commands/UngroupCommand.ts",
+      "bucket": "kernel",
+      "lines": 67
+    },
+    {
+      "file": "src/extensions/AttributeHandlerRegistry.ts",
+      "bucket": "kernel",
+      "lines": 24
+    },
+    {
+      "file": "src/extensions/CommandRegistry.ts",
+      "bucket": "kernel",
+      "lines": 26
+    },
+    {
+      "file": "src/extensions/IAttributeHandler.ts",
+      "bucket": "kernel",
+      "lines": 15
+    },
+    {
+      "file": "src/extensions/ICliCommand.ts",
+      "bucket": "kernel",
+      "lines": 15
+    },
+    {
+      "file": "src/extensions/IShapeProvider.ts",
+      "bucket": "kernel",
+      "lines": 17
+    },
+    {
+      "file": "src/extensions/ITreeDecorator.ts",
+      "bucket": "kernel",
+      "lines": 21
+    },
+    {
+      "file": "src/extensions/PluginContext.ts",
+      "bucket": "kernel",
+      "lines": 16
+    },
+    {
+      "file": "src/extensions/ShapeRegistry.ts",
+      "bucket": "kernel",
+      "lines": 36
+    },
+    {
+      "file": "src/extensions/TreeDecoratorRegistry.ts",
+      "bucket": "kernel",
+      "lines": 38
+    },
+    {
+      "file": "src/history/History.ts",
+      "bucket": "kernel",
+      "lines": 54
+    },
+    {
+      "file": "src/host/createApp.ts",
+      "bucket": "assembly",
+      "lines": 46
+    },
+    {
+      "file": "src/host/EditorSession.ts",
+      "bucket": "assembly",
+      "lines": 388
+    },
+    {
+      "file": "src/io/SvgReader.ts",
+      "bucket": "kernel",
+      "lines": 235
+    },
+    {
+      "file": "src/io/SvgWriter.ts",
+      "bucket": "kernel",
+      "lines": 32
+    },
+    {
+      "file": "src/model/Circle.ts",
+      "bucket": "kernel",
+      "lines": 128
+    },
+    {
+      "file": "src/model/Document.ts",
+      "bucket": "kernel",
+      "lines": 381
+    },
+    {
+      "file": "src/model/Ellipse.ts",
+      "bucket": "kernel",
+      "lines": 143
+    },
+    {
+      "file": "src/model/Group.ts",
+      "bucket": "kernel",
+      "lines": 110
+    },
+    {
+      "file": "src/model/Line.ts",
+      "bucket": "kernel",
+      "lines": 138
+    },
+    {
+      "file": "src/model/Rect.ts",
+      "bucket": "kernel",
+      "lines": 143
+    },
+    {
+      "file": "src/model/Shape.ts",
+      "bucket": "kernel",
+      "lines": 78
+    },
+    {
+      "file": "src/model/ShapeFactory.ts",
+      "bucket": "kernel",
+      "lines": 28
+    },
+    {
+      "file": "src/model/Text.ts",
+      "bucket": "kernel",
+      "lines": 130
+    }
+  ]
+}

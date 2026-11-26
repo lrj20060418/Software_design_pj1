@@ -1,0 +1,23 @@
+import type { IAttributeHandler } from "./IAttributeHandler.js";
+
+export class AttributeHandlerRegistry {
+  private readonly handlers: IAttributeHandler[] = [];
+
+  register(handler: IAttributeHandler): void {
+    if (this.handlers.some((h) => h.name === handler.name)) {
+      throw new Error(
+        `error: duplicate registration: attributes/${handler.name}`,
+      );
+    }
+    this.handlers.push(handler);
+  }
+
+  list(): readonly IAttributeHandler[] {
+    return this.handlers;
+  }
+
+  /** 返回所有声明负责该 (shapeId, attr) 的处理器 */
+  findHandlers(shapeId: string, attr: string): IAttributeHandler[] {
+    return this.handlers.filter((h) => h.handles(shapeId, attr));
+  }
+}

@@ -1,4 +1,4 @@
-import { Shape } from "./Shape.js";
+import { Shape, type TreeLineDecorator } from "./Shape.js";
 
 export class Circle extends Shape {
   private cx: number;
@@ -79,13 +79,18 @@ export class Circle extends Shape {
     }
   }
 
-  toTreeLine(indent: string, isLast: boolean): string[] {
+  toTreeLine(
+    indent: string,
+    isLast: boolean,
+    decorate?: TreeLineDecorator,
+  ): string[] {
     const branch = isLast ? "└── " : "├── ";
     let summary = `cx=${this.cx} cy=${this.cy} r=${this.r}`;
     if (this.fill !== undefined) {
       summary += ` fill=${this.fill}`;
     }
-    return [`${indent}${branch}circle#${this.id}  ${summary}`];
+    const line = `${indent}${branch}circle#${this.id}  ${summary}`;
+    return [this.applyTreeDecorate(line, decorate)];
   }
 
   toShowLines(parentRef: string): string[] {
