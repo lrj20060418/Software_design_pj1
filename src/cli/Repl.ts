@@ -1,17 +1,17 @@
 import * as readline from "node:readline";
+import type { App } from "../host/createApp.js";
 import { createApp } from "../host/createApp.js";
 import type { CommandDispatcher } from "./CommandDispatcher.js";
 
 /**
  * CLI 入口：维护提示符、读行、注释跳过，把一行交给 CommandDispatcher。
- * 本模块只做 IO，不直接改图形树。
  */
 export class Repl {
   private readonly dispatcher: CommandDispatcher;
 
-  constructor() {
-    const app = createApp();
-    this.dispatcher = app.dispatcher;
+  constructor(app?: App) {
+    const resolved = app ?? createApp();
+    this.dispatcher = resolved.dispatcher;
   }
 
   start(): void {
@@ -39,7 +39,9 @@ export class Repl {
         }
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        console.log(message.startsWith("error:") ? message : `error: ${message}`);
+        console.log(
+          message.startsWith("error:") ? message : `error: ${message}`,
+        );
       }
 
       rl.prompt();

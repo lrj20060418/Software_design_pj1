@@ -22,4 +22,8 @@ export class CommandRegistry {
   names(): string[] {
     return [...this.commands.keys()];
   }
+
+  unregister(name: string): boolean {
+    return this.commands.delete(name);
+  }
 }

@@ -3,7 +3,11 @@ import { BoxTypeLabelDecorator } from "./BoxTypeLabelDecorator.js";
 
 export { BoxTypeLabelDecorator } from "./BoxTypeLabelDecorator.js";
 
-export function activate(ctx: PluginContext): void {
+export function activate(
+  ctx: PluginContext,
+  _options?: Record<string, unknown>,
+): void {
+  void _options;
   ctx.treeDecorators.register(new BoxTypeLabelDecorator());
 }
 

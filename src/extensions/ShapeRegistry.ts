@@ -32,4 +32,8 @@ export class ShapeRegistry {
   types(): string[] {
     return [...this.providers.keys()];
   }
+
+  unregister(type: string): boolean {
+    return this.providers.delete(type);
+  }
 }

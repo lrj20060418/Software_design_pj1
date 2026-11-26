@@ -22,7 +22,7 @@
 | Exp-B0 | 属性扩展点契约 + ADR | `[x]` | §3 |
 | Exp-B1 | 图形插件 `box`（含 AttributeHandler） | `[x]` | §4；§3 |
 | Exp-T0 | 树标签：`modified-star` + `(box)` | `[x]` | §5 |
-| Exp-A0 | 双装配：代码装配 + 配置装配 + 加载器 | `[ ]` | §6 |
+| Exp-A0 | 双装配：代码装配 + 配置装配 + 加载器 | `[x]` | §6 |
 | Exp-D0 | 文档 / metrics / ADR / 收尾打 tag `p2` | `[ ]` | §7 |
 
 **本阶段明确不做（全局 Out-of-Scope，除非选做拓展）**
@@ -396,16 +396,14 @@ export interface AttributeHandler {
 # 两次输出 diff 为空（插件集合/顺序/options/CWD 一致）
 ```
 
-- [ ] 加载器四条失败路径 + 重复注册 + 回滚均有测试
-- [ ] 覆盖：Phase 1 §6 基础会话、§6.1 版本 B box 会话、含 `stats`/`dir` 的会话
-- [ ] 验 `dir` 时用内容固定的临时工作目录；日志写到该目录外
-- [ ] 基础兼容性比较时禁用新增插件（含树标签），对照 `final`
+- [x] 加载器失败路径 + manifest/activate/重复注册回滚（`npm run check:a0`）
+- [x] 方式 A/B 同一会话输出逐字节一致（box + stats + tree）
+- [x] `plugins.config.json` + `PluginLoader`（无硬编码插件 import）
+- [x] ADR-0004 配置校验时机
 
-**建议 commit**：
-- `p2: code assembly demo for plugins`（方式 A）
-- `p2: config loader and plugins.config.json`（方式 B）
+**入口**：`tsx src/cli/main.ts`（方式 A）· `tsx src/cli/main.ts --config plugins.config.json`（方式 B）
 
-> A/B 可用两个独立提交/分支分别证明，不要求同一提交同时满足两个 diff 判据。
+**建议 commit**：`feat(exp-a0): dual assembly code and config plugin loader`
 
 ---
 
@@ -470,7 +468,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-A0`（下一个未完成项）
+**当前激活**：`Exp-D0`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

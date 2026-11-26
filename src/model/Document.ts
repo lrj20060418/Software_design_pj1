@@ -125,20 +125,22 @@ export class Document {
     if (!container) {
       throw new Error(`error: no such container: ${containerId}`);
     }
-    if (!container.isContainer() || !(container instanceof Group)) {
+    const group = asGroup(container);
+    if (!container.isContainer() || !group) {
       throw new Error(`error: not a container: ${containerId}`);
     }
 
     this.assertSubtreeIdsAvailable(shape);
-    container.addChild(shape);
+    group.addChild(shape);
     this.registerSubtree(shape, containerId);
   }
 
   /** 收集 shape 子树全部 id（含自身） */
   collectSubtreeIds(shape: Shape): string[] {
     const ids = [shape.getId()];
-    if (shape instanceof Group) {
-      for (const child of shape.getChildren()) {
+    const group = asGroup(shape);
+    if (group) {
+      for (const child of group.getChildren()) {
         ids.push(...this.collectSubtreeIds(child));
       }
     }
@@ -167,8 +169,8 @@ export class Document {
         this.roots.splice(index, 1);
       }
     } else {
-      const parent = this.shapes.get(parentId);
-      if (parent instanceof Group) {
+      const parent = asGroup(this.shapes.get(parentId));
+      if (parent) {
         parent.removeChild(shape);
       }
     }
@@ -195,8 +197,8 @@ export class Document {
         index = 0;
       }
     } else {
-      const parent = this.shapes.get(parentId);
-      if (!(parent instanceof Group)) {
+      const parent = asGroup(this.shapes.get(parentId));
+      if (!parent) {
         throw new Error(`error: not a container: ${parentId}`);
       }
       if (!parent.allowsChildRemoval(id)) {
@@ -230,12 +232,13 @@ export class Document {
       return;
     }
 
-    const parent = this.shapes.get(parentId);
+    const parent = asGroup(this.shapes.get(parentId));
     if (!parent) {
-      throw new Error(`error: no such container: ${parentId}`);
-    }
-    if (!(parent instanceof Group)) {
-      throw new Error(`error: not a container: ${parentId}`);
+      throw new Error(
+        this.shapes.has(parentId!)
+          ? `error: not a container: ${parentId}`
+          : `error: no such container: ${parentId}`,
+      );
     }
 
     parent.insertChildAt(shape, index);
@@ -249,8 +252,8 @@ export class Document {
     if (parentId === null) {
       return this.roots.indexOf(shape);
     }
-    const parent = this.shapes.get(parentId);
-    if (!(parent instanceof Group)) {
+    const parent = asGroup(this.shapes.get(parentId));
+    if (!parent) {
       throw new Error(`error: not a container: ${parentId}`);
     }
     return parent.indexOfChild(shape);
@@ -284,8 +287,8 @@ export class Document {
         index = 0;
       }
     } else {
-      const parent = this.shapes.get(parentId);
-      if (!(parent instanceof Group)) {
+      const parent = asGroup(this.shapes.get(parentId));
+      if (!parent) {
         throw new Error(`error: not a container: ${parentId}`);
       }
       if (!parent.allowsChildRemoval(id)) {
@@ -311,12 +314,13 @@ export class Document {
       return;
     }
 
-    const parent = this.shapes.get(parentId);
+    const parent = asGroup(this.shapes.get(parentId));
     if (!parent) {
-      throw new Error(`error: no such container: ${parentId}`);
-    }
-    if (!(parent instanceof Group)) {
-      throw new Error(`error: not a container: ${parentId}`);
+      throw new Error(
+        this.shapes.has(parentId)
+          ? `error: not a container: ${parentId}`
+          : `error: no such container: ${parentId}`,
+      );
     }
     parent.insertChildAt(shape, index);
     this.parentIds.set(id, parentId);
@@ -334,8 +338,8 @@ export class Document {
 
   /** 仅注销 Group 自身（子节点须已提升走） */
   unregisterGroupNode(id: string): Group {
-    const shape = this.requireShape(id);
-    if (!(shape instanceof Group)) {
+    const shape = asGroup(this.requireShape(id));
+    if (!shape) {
       throw new Error(`error: not a container: ${id}`);
     }
     this.unlinkFromParent(id);
@@ -348,16 +352,18 @@ export class Document {
     const id = shape.getId();
     this.shapes.set(id, shape);
     this.parentIds.set(id, parentId);
-    if (shape instanceof Group) {
-      for (const child of shape.getChildren()) {
+    const group = asGroup(shape);
+    if (group) {
+      for (const child of group.getChildren()) {
         this.registerSubtree(child, id);
       }
     }
   }
 
   private unregisterSubtree(shape: Shape): void {
-    if (shape instanceof Group) {
-      for (const child of shape.getChildren()) {
+    const group = asGroup(shape);
+    if (group) {
+      for (const child of group.getChildren()) {
         this.unregisterSubtree(child);
       }
     }
@@ -378,11 +384,13 @@ export class Document {
 
     if (rootId !== undefined) {
       const shape = this.requireShape(rootId);
-      if (shape instanceof Group) {
-        const label = shape.treeLabel();
-        const title = decorate ? decorate(shape, label) : label;
+      // 用 isContainer/getChildren 而非 instanceof，避免插件动态加载时 Group 双实例
+      const group = asGroup(shape);
+      if (group) {
+        const label = group.treeLabel();
+        const title = decorate ? decorate(group, label) : label;
         const lines = [title];
-        const children = shape.getChildren();
+        const children = group.getChildren();
         children.forEach((child, index) => {
           const last = index === children.length - 1;
           lines.push(...child.toTreeLine("", last, decorate));
@@ -409,4 +417,16 @@ export class Document {
     const shape = this.requireShape(id);
     return shape.toShowLines(this.parentRefOf(id)).join("\n");
   }
+}
+
+/** 插件动态加载时可能出现 Group 双实例；用能力检测代替 instanceof */
+function asGroup(shape: Shape | undefined | null): Group | null {
+  if (!shape || !shape.isContainer()) {
+    return null;
+  }
+  const candidate = shape as Group;
+  if (typeof candidate.getChildren !== "function") {
+    return null;
+  }
+  return candidate;
 }

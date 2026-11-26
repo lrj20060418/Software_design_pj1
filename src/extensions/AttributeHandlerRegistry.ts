@@ -17,6 +17,19 @@ export class AttributeHandlerRegistry {
     return this.handlers;
   }
 
+  unregister(name: string): boolean {
+    const index = this.handlers.findIndex((h) => h.name === name);
+    if (index < 0) {
+      return false;
+    }
+    this.handlers.splice(index, 1);
+    return true;
+  }
+
+  names(): string[] {
+    return this.handlers.map((h) => h.name);
+  }
+
   /** 返回所有声明负责该 (shapeId, attr) 的处理器 */
   findHandlers(
     shapeId: string,

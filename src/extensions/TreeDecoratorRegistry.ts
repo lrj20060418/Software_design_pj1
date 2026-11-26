@@ -18,6 +18,19 @@ export class TreeDecoratorRegistry {
     return this.decorators;
   }
 
+  unregister(name: string): boolean {
+    const index = this.decorators.findIndex((d) => d.name === name);
+    if (index < 0) {
+      return false;
+    }
+    this.decorators.splice(index, 1);
+    return true;
+  }
+
+  names(): string[] {
+    return this.decorators.map((d) => d.name);
+  }
+
   /**
    * 无装饰器时返回 `undefined`，使 tree 走 Phase 1 原路径（逐字节不变）。
    */

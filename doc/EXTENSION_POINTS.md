@@ -17,6 +17,16 @@
 
 ## 装配入口
 
-- 组合根：`src/host/createApp.ts`
+- 组合根：`src/host/createApp.ts`（`assembly: "code" | "config"`）
+- 共用校验：`src/host/activatePlugin.ts`（contributes 比对 + 回滚）
+- 配置加载器：`src/host/PluginLoader.ts`（装配侧；动态 `import(module)`）
+- 配置文件：`plugins.config.json`
 - 内置注册：`src/builtin/registerBuiltins.ts`
 - 插件上下文：`src/extensions/PluginContext.ts`
+
+### 启动
+
+```bash
+npx tsx src/cli/main.ts                              # 方式 A
+npx tsx src/cli/main.ts --config plugins.config.json # 方式 B
+```

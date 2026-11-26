@@ -3,7 +3,11 @@ import { ModifiedStarDecorator } from "./ModifiedStarDecorator.js";
 
 export { ModifiedStarDecorator } from "./ModifiedStarDecorator.js";
 
-export function activate(ctx: PluginContext): void {
+export function activate(
+  ctx: PluginContext,
+  _options?: Record<string, unknown>,
+): void {
+  void _options;
   ctx.treeDecorators.register(new ModifiedStarDecorator());
 }
 

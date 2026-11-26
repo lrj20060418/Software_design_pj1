@@ -9,7 +9,11 @@ export { BoxAttributeHandler } from "./BoxAttributeHandler.js";
 /**
  * @svgframe/plugin-shape-box
  */
-export function activate(ctx: PluginContext): void {
+export function activate(
+  ctx: PluginContext,
+  _options?: Record<string, unknown>,
+): void {
+  void _options;
   ctx.shapes.register(new BoxShapeProvider());
   ctx.attributes.register(new BoxAttributeHandler());
 }

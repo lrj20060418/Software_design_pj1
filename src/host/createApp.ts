@@ -1,3 +1,6 @@
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { Document } from "../model/Document.js";
 import { History } from "../history/History.js";
 import { ShapeFactory } from "../model/ShapeFactory.js";
@@ -8,6 +11,9 @@ import {
 } from "../builtin/registerBuiltins.js";
 import { EditorSession } from "./EditorSession.js";
 import { CommandDispatcher } from "../cli/CommandDispatcher.js";
+import { activatePluginValidated } from "./activatePlugin.js";
+import { contributesFromPackageJson } from "./pluginManifest.js";
+import { loadPluginsFromConfig } from "./PluginLoader.js";
 import { activate as activateStats } from "../../plugins/command-stats/src/index.js";
 import {
   activate as activateDir,
@@ -17,10 +23,22 @@ import { activate as activateBox } from "../../plugins/shape-box/src/index.js";
 import { activate as activateTreeStar } from "../../plugins/tree-star/src/index.js";
 import { activate as activateTreeBoxLabel } from "../../plugins/tree-box-label/src/index.js";
 
+const HOST_DIR = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.resolve(HOST_DIR, "../..");
+
 export interface CreateAppOptions {
   /**
-   * 是否默认启用可选插件。默认 true。
-   * 单项可用 `plugins.*` 覆盖。
+   * `code`：组合根显式 activate（方式 A，默认）。
+   * `config`：仅内置 + 从 plugins.config.json 加载（方式 B）。
+   */
+  assembly?: "code" | "config";
+  /** 方式 B 的配置路径；默认仓库根 `plugins.config.json` */
+  configPath?: string;
+  /** 加载器/校验错误输出；默认 console.log */
+  pluginLog?: (message: string) => void;
+  /**
+   * 方式 A 下是否启用可选插件。默认 true。
+   * 单项可用 `plugins.*` 覆盖。方式 B 忽略此项（由配置决定）。
    */
   enableOptionalPlugins?: boolean;
   plugins?: {
@@ -30,7 +48,6 @@ export interface CreateAppOptions {
     treeStar?: boolean;
     treeBoxLabel?: boolean;
   };
-  /** 传给 dir 插件（测试注入 cwd / FakeDirectoryAccess） */
   dir?: DirPluginOptions;
 }
 
@@ -50,10 +67,42 @@ function pluginEnabled(
   return options.plugins?.[name] ?? fallback;
 }
 
+function readPluginPackage(relDir: string): unknown {
+  const pkgPath = path.join(REPO_ROOT, relDir, "package.json");
+  return JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+}
+
+function activateCodePlugin(
+  ctx: PluginContext,
+  relDir: string,
+  activate: (
+    ctx: PluginContext,
+    options?: Record<string, unknown>,
+  ) => void,
+  log: (m: string) => void,
+  options?: Record<string, unknown>,
+): void {
+  const pkg = readPluginPackage(relDir);
+  const name = (pkg as { name?: string }).name ?? relDir;
+  const error = activatePluginValidated(ctx, {
+    name,
+    contributes: contributesFromPackageJson(pkg),
+    activate,
+    options,
+  });
+  if (error) {
+    log(error);
+  }
+}
+
 /**
- * 组合根：创建扩展上下文、注册内置能力、按需 activate 可选插件。
+ * 组合根：内置能力 + 方式 A 代码装配或方式 B 配置装配。
+ * 可选插件均走 `activatePluginValidated`（同一注册/校验/回滚路径）。
  */
 export function createApp(options: CreateAppOptions = {}): App {
+  const log = options.pluginLog ?? console.log;
+  const assembly = options.assembly ?? "code";
+
   const document = new Document();
   const history = new History();
   const ctx = new PluginContext(document, history);
@@ -73,23 +122,53 @@ export function createApp(options: CreateAppOptions = {}): App {
 
   registerBuiltinCommands(ctx, session);
 
-  if (pluginEnabled(options, "stats")) {
-    activateStats(ctx);
-  }
-  if (pluginEnabled(options, "dir")) {
-    activateDir(ctx, options.dir ?? {});
-  }
-  if (pluginEnabled(options, "box")) {
-    activateBox(ctx);
-  }
-  // 注册顺序影响同行多标签拼接：先 (box) 再 *
-  if (pluginEnabled(options, "treeBoxLabel")) {
-    activateTreeBoxLabel(ctx);
-  }
-  if (pluginEnabled(options, "treeStar")) {
-    activateTreeStar(ctx);
+  if (assembly === "code") {
+    registerOptionalPluginsCode(ctx, options, log);
   }
 
   const dispatcher = new CommandDispatcher(ctx.commands);
   return { ctx, document, history, session, dispatcher };
+}
+
+/** 方式 B：在 createApp 之后异步装入配置插件 */
+export async function loadConfigPlugins(
+  app: App,
+  options: CreateAppOptions = {},
+): Promise<void> {
+  const log = options.pluginLog ?? console.log;
+  const configPath =
+    options.configPath ?? path.join(REPO_ROOT, "plugins.config.json");
+  await loadPluginsFromConfig(app.ctx, configPath, log);
+}
+
+function registerOptionalPluginsCode(
+  ctx: PluginContext,
+  options: CreateAppOptions,
+  log: (m: string) => void,
+): void {
+  if (pluginEnabled(options, "stats")) {
+    activateCodePlugin(ctx, "plugins/command-stats", activateStats, log);
+  }
+  if (pluginEnabled(options, "dir")) {
+    activateCodePlugin(
+      ctx,
+      "plugins/command-dir",
+      (c, opts) => activateDir(c, { ...(options.dir ?? {}), ...(opts ?? {}) }),
+      log,
+    );
+  }
+  if (pluginEnabled(options, "box")) {
+    activateCodePlugin(ctx, "plugins/shape-box", activateBox, log);
+  }
+  if (pluginEnabled(options, "treeBoxLabel")) {
+    activateCodePlugin(
+      ctx,
+      "plugins/tree-box-label",
+      activateTreeBoxLabel,
+      log,
+    );
+  }
+  if (pluginEnabled(options, "treeStar")) {
+    activateCodePlugin(ctx, "plugins/tree-star", activateTreeStar, log);
+  }
 }
