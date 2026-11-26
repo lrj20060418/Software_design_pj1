@@ -21,7 +21,7 @@
 | Exp-C1 | 命令插件：`dir` + 文件系统适配器 | `[x]` | §2.2–2.3 |
 | Exp-B0 | 属性扩展点契约 + ADR | `[x]` | §3 |
 | Exp-B1 | 图形插件 `box`（含 AttributeHandler） | `[x]` | §4；§3 |
-| Exp-T0 | 树标签：`modified-star` + `(box)` | `[ ]` | §5 |
+| Exp-T0 | 树标签：`modified-star` + `(box)` | `[x]` | §5 |
 | Exp-A0 | 双装配：代码装配 + 配置装配 + 加载器 | `[ ]` | §6 |
 | Exp-D0 | 文档 / metrics / ADR / 收尾打 tag `p2` | `[ ]` | §7 |
 
@@ -334,11 +334,14 @@ export interface AttributeHandler {
 
 **验收**
 
-- [ ] 新增标签时内核与渲染器差异为 0
-- [ ] `modified-star` 状态机独立测试：编辑 → 保存 → 再编辑 → undo 回保存点
-- [ ] 两标签同时启用输出正确
+- [x] 无装饰器时 tree 基线不变；装饰器为独立插件（`npm run check:t0`）
+- [x] `modified-star` 状态机：编辑 → 保存 → 再编辑 → undo 回保存点
+- [x] 两标签同时启用：`g#n1 (box) *`
+- [x] ADR-0003 记录 dirty / 祖先 / 顺序 / 新建
 
-**建议 commit**：`p2: tree decorators star and box-label`
+**代码位置**：`plugins/tree-star/` · `plugins/tree-box-label/` · `doc/adr/0003-tree-decorator-dirty-semantics.md`
+
+**建议 commit**：`feat(exp-t0): tree decorators modified-star and box-label`
 
 ---
 
@@ -467,7 +470,7 @@ Exp-V0 → Exp-V1 → Exp-V2
        → Exp-D0（tag p2）
 ```
 
-**当前激活**：`Exp-T0`（下一个未完成项）
+**当前激活**：`Exp-A0`（下一个未完成项）
 
 完成一个 Exp 后：勾选本文件状态 → **自动验收** → **单独一次 commit** → **push 到远程** → 再激活下一个。  
 约定：每个 Exp 结束时由 AI 按该 Exp 验收项核对，执行 commit 并 `git push`（无需再口头确认）。

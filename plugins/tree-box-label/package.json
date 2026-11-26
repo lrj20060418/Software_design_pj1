@@ -1,0 +1,12 @@
+{
+  "name": "@svgframe/plugin-tree-box-label",
+  "version": "0.1.0",
+  "description": "TreeDecorator: (box) type label (PJ1 Phase 2 Exp-T0)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "contributes": {
+    "decorators": ["box-type-label"]
+  },
+  "license": "ISC"
+}

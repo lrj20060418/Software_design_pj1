@@ -55,6 +55,7 @@ export class EditorSession {
 
     this.document.init(width, height);
     this.history.clearAfterIo();
+    this.notifyTreeDecoratorsReset();
     return `canvas ${width}x${height} created`;
   }
 
@@ -66,6 +67,7 @@ export class EditorSession {
     try {
       const warnings = this.reader.read(filePath, this.document);
       this.history.clearAfterIo();
+      this.notifyTreeDecoratorsReset();
       const count = this.document.elementCount();
       const lines = [...warnings, `read ${filePath} (${count} elements)`];
       return lines.join("\n");
@@ -89,9 +91,22 @@ export class EditorSession {
       const count = this.writer.write(this.document, filePath);
       this.document.setSourcePath(filePath);
       this.history.clearAfterIo();
+      this.notifyTreeDecoratorsSave();
       return `saved to ${filePath} (${count} elements)`;
     } catch (err) {
       return err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  private notifyTreeDecoratorsReset(): void {
+    for (const decorator of this.treeDecorators.list()) {
+      decorator.onAfterReset?.(this.document);
+    }
+  }
+
+  private notifyTreeDecoratorsSave(): void {
+    for (const decorator of this.treeDecorators.list()) {
+      decorator.onAfterSave?.(this.document);
     }
   }
 

@@ -41,7 +41,11 @@ function check(name: string, ok: boolean, detail = ""): void {
   );
 
   const tree = d.dispatch("tree n1");
-  check("tree label has (box)", tree.split("\n")[0] === "g#n1 (box)", tree);
+  check(
+    "tree label is g# without decorator",
+    tree.split("\n")[0] === "g#n1",
+    tree,
+  );
 
   d.dispatch("set n1 fill #f5a623");
   check(

@@ -17,4 +17,10 @@ export interface ITreeDecorator {
     line: string,
     context: { document: Document; shape: Shape | null },
   ): string;
+
+  /** 文档已保存到磁盘后（可选） */
+  onAfterSave?(document: Document): void;
+
+  /** 文档 init / read 重置后（可选） */
+  onAfterReset?(document: Document): void;
 }

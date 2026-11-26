@@ -1,0 +1,12 @@
+{
+  "name": "@svgframe/plugin-tree-star",
+  "version": "0.1.0",
+  "description": "TreeDecorator: modified-star (PJ1 Phase 2 Exp-T0)",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "contributes": {
+    "decorators": ["modified-star"]
+  },
+  "license": "ISC"
+}

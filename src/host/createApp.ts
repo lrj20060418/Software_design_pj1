@@ -14,6 +14,8 @@ import {
   type DirPluginOptions,
 } from "../../plugins/command-dir/src/index.js";
 import { activate as activateBox } from "../../plugins/shape-box/src/index.js";
+import { activate as activateTreeStar } from "../../plugins/tree-star/src/index.js";
+import { activate as activateTreeBoxLabel } from "../../plugins/tree-box-label/src/index.js";
 
 export interface CreateAppOptions {
   /**
@@ -25,6 +27,8 @@ export interface CreateAppOptions {
     stats?: boolean;
     dir?: boolean;
     box?: boolean;
+    treeStar?: boolean;
+    treeBoxLabel?: boolean;
   };
   /** 传给 dir 插件（测试注入 cwd / FakeDirectoryAccess） */
   dir?: DirPluginOptions;
@@ -40,7 +44,7 @@ export interface App {
 
 function pluginEnabled(
   options: CreateAppOptions,
-  name: "stats" | "dir" | "box",
+  name: keyof NonNullable<CreateAppOptions["plugins"]>,
 ): boolean {
   const fallback = options.enableOptionalPlugins !== false;
   return options.plugins?.[name] ?? fallback;
@@ -77,6 +81,13 @@ export function createApp(options: CreateAppOptions = {}): App {
   }
   if (pluginEnabled(options, "box")) {
     activateBox(ctx);
+  }
+  // 注册顺序影响同行多标签拼接：先 (box) 再 *
+  if (pluginEnabled(options, "treeBoxLabel")) {
+    activateTreeBoxLabel(ctx);
+  }
+  if (pluginEnabled(options, "treeStar")) {
+    activateTreeStar(ctx);
   }
 
   const dispatcher = new CommandDispatcher(ctx.commands);

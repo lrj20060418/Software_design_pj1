@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-26T02:52:28.915Z",
+  "generatedAt": "2026-11-26T02:56:52.316Z",
   "note": "LOC by bucket for Phase 2 Exp-F0 scaffold; complexity delta vs final filled at p2 tag.",
   "totals": {
-    "kernel": 2466,
-    "assembly": 1220,
-    "plugins": 520,
+    "kernel": 2472,
+    "assembly": 1246,
+    "plugins": 704,
     "other": 0
   },
   "files": [
@@ -56,7 +56,7 @@
     {
       "file": "plugins/shape-box/src/Box.ts",
       "bucket": "plugins",
-      "lines": 102
+      "lines": 103
     },
     {
       "file": "plugins/shape-box/src/BoxAttributeHandler.ts",
@@ -72,6 +72,31 @@
       "file": "plugins/shape-box/src/index.ts",
       "bucket": "plugins",
       "lines": 18
+    },
+    {
+      "file": "plugins/tree-box-label/src/BoxTypeLabelDecorator.ts",
+      "bucket": "plugins",
+      "lines": 26
+    },
+    {
+      "file": "plugins/tree-box-label/src/index.ts",
+      "bucket": "plugins",
+      "lines": 11
+    },
+    {
+      "file": "plugins/tree-star/src/index.ts",
+      "bucket": "plugins",
+      "lines": 11
+    },
+    {
+      "file": "plugins/tree-star/src/ModifiedStarDecorator.ts",
+      "bucket": "plugins",
+      "lines": 95
+    },
+    {
+      "file": "plugins/tree-star/src/shapeFingerprint.ts",
+      "bucket": "plugins",
+      "lines": 40
     },
     {
       "file": "src/builtin/commands/AddToCliCommand.ts",
@@ -326,7 +351,7 @@
     {
       "file": "src/extensions/ITreeDecorator.ts",
       "bucket": "kernel",
-      "lines": 21
+      "lines": 27
     },
     {
       "file": "src/extensions/PluginContext.ts",
@@ -351,12 +376,12 @@
     {
       "file": "src/host/createApp.ts",
       "bucket": "assembly",
-      "lines": 85
+      "lines": 96
     },
     {
       "file": "src/host/EditorSession.ts",
       "bucket": "assembly",
-      "lines": 370
+      "lines": 385
     },
     {
       "file": "src/io/SvgReader.ts",

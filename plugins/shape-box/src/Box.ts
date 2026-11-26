@@ -41,7 +41,8 @@ export class Box extends Group {
   }
 
   override treeLabel(): string {
-    return `g#${this.id} (box)`;
+    // `(box)` 标注由 TreeDecorator 插件提供（Exp-T0），此处与普通 g 行一致
+    return `g#${this.id}`;
   }
 
   override formatCreated(containerId?: string): string | undefined {
